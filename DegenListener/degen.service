@@ -1,0 +1,14 @@
+[Unit]
+Description=Degen Listener
+After=network.target
+
+[Service]
+WorkingDirectory=/home/crash/crashPredict/listenCrash/
+ExecStart=/usr/bin/python3.11 /home/crash/crashPredict/listenCrash/main.py
+Restart=always
+SyslogIdentifier=degen
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

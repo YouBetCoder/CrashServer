@@ -1,0 +1,17 @@
+﻿@inject MarkdownBlog BlogPosts
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<section>
+    <h2 class="text-4xl md:text-6xl font-bold tracking-tighter leading-tight md:pr-8 whitespace-nowrap text-center pt-8">
+        Crash Predict
+    </h2>
+    <div class="mb-8 md:mb-16">
+        <div class="sm:mx-0 sm:px-4 sm:py-8 flex justify-evenly">
+            <div data-component="pages/Home/Home.mjs" data-props="{ template:'mvc' }"></div>
+        </div>
+
+    </div>
+</section>

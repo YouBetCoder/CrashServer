@@ -1,0 +1,4 @@
+websocket-client==1.8.0
+servicestack==0.1.3
+pip-system-certs==4.0
+python-dotenv==1.0.1
