@@ -1,0 +1,15 @@
+@inherits ServiceStack.Mvc.ViewPage
+@{
+    ViewData["Title"] = "Prediction Results";
+}
+
+<div class="mt-8 mb-20 mx-auto max-w-fit">
+
+    <h1 class="@Html.ClassNames(Css.H1, "my-8")">@ViewData["Title"]</h1>
+
+    <div id="bookings" data-component="pages/Home/Results.mjs"></div>
+
+
+   
+
+</div>

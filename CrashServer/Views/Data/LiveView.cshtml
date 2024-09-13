@@ -1,0 +1,137 @@
+@inherits ServiceStack.Mvc.ViewPage
+@{
+    ViewData["Title"] = "Live View";
+}
+<div class="mt-8 mb-20 mx-auto max-w-9/10 lg:max-w-fit">
+
+    <h1 class="@Html.ClassNames(Css.H1, "my-8")">@ViewData["Title"]</h1>
+
+    <div class="col-span-6 md:col-span-4 sm:col-span-1">
+        <div>
+            <span>Limit:</span>
+            <input id="limit-input" type="number" class="border rounded pl-2" value="20" min="0" max="20"/>
+        </div>
+    </div>
+
+    <!-- Responsive grid -->
+    <div class="lg:grid lg:grid-cols-2 gap-4 ">
+
+
+        <div class="md:grid md:grid-cols-2 gap-4">
+            <div class=" border-2 border-gray-200 rounded overflow-hidden shadow-lg" id="graph"></div>
+            <!-- ActiveGameRoomPrediction Table -->
+            <div>
+                <div>
+                    <span>Room:</span>
+                    <input id="room_id" type="number" class="border rounded pl-2" value="1" min="0" max="20" disabled/>
+                </div>
+                <table class="table-auto w-full border-2 border-gray-200 rounded overflow-hidden shadow-lg">
+                    <thead>
+                    <tr class=" font-bold ">
+
+                        <th class="p-2">Room ID</th>
+                        <th class="p-2">Round ID</th>
+                        <th class="p-2">Std Deviation</th>
+                        <th class="p-2">Prediction3</th>
+                        <th class="p-2">Prediction4</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="activePrediction">
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="col-span-6 md:col-span-4 sm:col-span-1">
+            <div>
+                <span>Limit:</span>
+                <input id="limit-input2" type="number" class="border rounded pl-2" value="10" min="0" max="10"/>
+            </div>
+        </div>
+        <!-- Data Tables -->
+
+        <div class="h-auto w-full lg:order-2 order-1">
+            <div class="space-y-4">
+
+
+                <!-- Last 6 Results Table -->
+                <table class="table-auto w-full border-1 border-gray-200 rounded overflow-hidden shadow-lg excel-table">
+                    <thead>
+                    <tr class="bg-gray-300 font-bold">
+                        <th colspan="6" class="p-2">Last X Results</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="lastresults">
+
+                    </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+    <!-- Info Block -->
+    <div class="mt-4 bg-white p-6 rounded-lg shadow border-t-4 border-blue-500">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-6 px-6">
+
+            <!-- Round ID and Round Result -->
+            <div class="mt-6 text-center">
+                <span class="text-gray-700 block text-xl">Table Information</span>
+                <span class="text-black text-2xl">Round ID: and Round Result: </span>
+            </div>
+
+            <!-- Prediction Status -->
+            <div class="mt-6 text-center">
+                <span class="text-gray-700 block text-xl">Exact: .5 or less</span>
+                <span class="text-black text-2xl">Prediction3/Prediction4 Both or None.</span>
+            </div>
+
+            <!-- Std Dev -->
+            <div class="mt-6 text-center ">
+                <span class="text-gray-700 block text-xl">Last 30 Results Std Dev</span>
+                <span class="text-black text-2xl">Standard Deviation Value of the last 30</span>
+            </div>
+
+            <!-- Safe Bet -->
+            <div class="mt-6 text-center">
+                <span class="text-gray-700 block text-xl">Safe Bet at 2x</span>
+                <span class="text-black text-2xl">If you bet 2x would you have won a safe bet</span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .PredictionUnknown {
+        background-color: #FCD34D;  
+    }
+
+    .PredictionNone {
+        background-color: #EF4444;  
+    color: whitesmoke;
+    }
+
+    .PredictionPrediction3 {
+        background-color: #6366F1;  
+    color: whitesmoke;
+    }
+
+    .PredictionPrediction4 {
+        background-color: #A855F7; 
+    color: whitesmoke;
+    }
+
+    .PredictionBoth {
+        background-color: #10B981;  
+    color: whitesmoke;
+    }
+</style>
+
+<script src="~/js/liveview.js" asp-append-version="true"></script>
