@@ -7,7 +7,7 @@ public class NotifyLiveViewService(IServerEvents serverEvents) : Service
 {
     public NotifyLiveViewDataUpdatedResponse Post(NotifyLiveViewDataUpdatedRequest request)
     {
-        serverEvents.NotifyChannelAsync("LiveView",  new NotifyLiveViewDataUpdatedPacket() { Id = request.Id });
+        serverEvents.NotifyChannelAsync("LiveView",  new NotifyLiveViewDataUpdatedPacket() { Id = request.Id, TeaCup=request.TeaCup });
 
         return new NotifyLiveViewDataUpdatedResponse();
     }

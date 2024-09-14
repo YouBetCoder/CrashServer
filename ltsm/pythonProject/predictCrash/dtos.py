@@ -1,19 +1,19 @@
 """ Options:
-Date: 2024-09-14 21:29:22
+Date: 2024-09-14 15:48:03
 Version: 8.40
 Tip: To override a DTO option, remove "#" prefix before updating
-BaseUrl: https://crash.digitalstar.co
+BaseUrl: https://localhost:5001
 
-#GlobalNamespace: 
+#GlobalNamespace:
 #AddServiceStackTypes: True
 #AddResponseStatus: False
-#AddImplicitVersion: 
+#AddImplicitVersion:
 #AddDescriptionAsComments: True
-#IncludeTypes: 
-#ExcludeTypes: 
+#IncludeTypes:
+#ExcludeTypes:
 #DefaultImports: datetime,decimal,marshmallow.fields:*,servicestack:*,typing:*,dataclasses:dataclass/field,dataclasses_json:dataclass_json/LetterCase/Undefined/config,enum:Enum/IntEnum
-#DataClass: 
-#DataClassJson: 
+#DataClass:
+#DataClassJson:
 """
 
 import datetime
@@ -41,11 +41,15 @@ class ActiveGameRoomPrediction:
     prediction_arima: Decimal = decimal.Decimal(0)
 
 
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class IdentityUser():
+    pass
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
-class ApplicationUser():
+class ApplicationUser(IdentityUser):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     display_name: Optional[str] = None
@@ -137,6 +141,7 @@ class NotifyLiveViewDataUpdatedResponse:
 @dataclass
 class NotifyLiveViewDataUpdatedRequest(IReturn[NotifyLiveViewDataUpdatedResponse]):
     id: int = 0
+    tea_cup: bool = False
 
 
 # @Route("/data/queryactivegameroomprediction")

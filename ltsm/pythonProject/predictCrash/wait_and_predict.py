@@ -1,7 +1,6 @@
 import decimal
 import os
 import time
-from _decimal import Decimal
 from typing import List
 
 import numpy
@@ -13,7 +12,7 @@ from predictCrash.get_game_data import get_next_game
 from predictCrash.kalman import predict_next_kalman
 
 from predictCrash.service_stack_client import create_client
-from teacup import detect_enders_teacup
+from predictCrash.teacup import detect_enders_teacup
 
 client = create_client()
 import matplotlib.pyplot as plt
@@ -29,16 +28,9 @@ from discord_webhook import DiscordWebhook, DiscordEmbed
 yellow = 'FFFF00'
 blue = '03b2f8'
 
-# Example usage
-numbers = [1, 57, 49, 47]  # Replace with your actual numbers
-if detect_pattern(numbers):
-    print("Pattern detected!")
-else:
-    print("Pattern not detected.")
-
 
 def send_predictions_to_discord(last_game, room_id, arima_result, kalman_result, decimal_result_3, decimal_result4,
-                                std_dev, last_3_games, last_3_std_dev, last_5_results):
+                                std_dev, last_3_games, last_3_std_dev, last_5_results, teacup_detect):
     try:
         plt.clf()
         plt.plot(last_5_results)
@@ -60,7 +52,7 @@ def send_predictions_to_discord(last_game, room_id, arima_result, kalman_result,
         webhook = DiscordWebhook(url=webhook_url)
 
         # each field as a separate embed
-        teacup_detect = detect_enders_teacup(last_5_results[-4:])
+
         embed_last_games = DiscordEmbed(title="Last 5 games",
                                         description=f", ".join(last_3_games),
                                         color=yellow)
@@ -188,17 +180,10 @@ def wait_and_predict(prev_round_id):
     # else:
     #     decimal_result4 = Decimal(float(next_result4[0][0]))
 
-    output_of_predict = (f"Last game is {last_game.round_id} in room {room_id}, Next game ({last_game.round_id + 1}) "
-                         f"result should be:\n "
-                         f"Arima says {arima_result} \n"
-                         f"Kalman says {kalman_result} \n"
-                         f"Prediction 3 (weighted): {decimal_result_3} \n"
-                         f"Prediction 4: {decimal_result4} \n"
-                         f"Std Dev: {std_dev}\n")
-    print(output_of_predict)
+    teacup_detect = detect_enders_teacup(last_5[-4:])
     last_three_results = list(map(str, last_30[-5:]))
     send_predictions_to_discord(last_game, room_id, arima_result, kalman_result, decimal_result_3, decimal_result4,
-                                std_dev, last_three_results, last_3_std_dev, last_5)
+                                std_dev, last_three_results, last_3_std_dev, last_5, teacup_detect)
     try:
         result: CreateActiveGameRoomPrediction = CreateActiveGameRoomPrediction(game_number=game_number,
                                                                                 room_id=room_id,
@@ -211,7 +196,7 @@ def wait_and_predict(prev_round_id):
                                                                                 prediction_arima=arima_result)
 
         post_result = client.post(result)
-        client.post(NotifyLiveViewDataUpdatedRequest(id=int(post_result.id)))
+        client.post(NotifyLiveViewDataUpdatedRequest(id=int(post_result.id), tea_cup=teacup_detect))
         print(post_result)
 
     except Exception as e:

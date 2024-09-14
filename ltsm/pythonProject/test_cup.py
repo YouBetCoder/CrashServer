@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 from get_all_game_results import get_all_game_results
 from predictCrash.dtos import ActiveGameResult
-from teacup import detect_enders_teacup
+from predictCrash.teacup import detect_enders_teacup
 
 results = get_all_game_results()
 

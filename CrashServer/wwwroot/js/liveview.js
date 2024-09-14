@@ -39,8 +39,18 @@ function drawDonut(results) {
 
 }
 
+function DrawTeaCup(teaCup) {
+    let tea = "No Teacup";
+    if (teaCup) {
+        tea = "TEA CUP DETECTED!";
+    }
+    $('#teaCup').html(`
+            <td class="p-2" colspan="6"><span class="font-extrabold">${tea}</span></td>            
+    `)
+}
+
 function DrawPredictionTable(result) {
-    console.log(result)
+
     $('#activePrediction').html(`
             <td class="p-2"><span class="font-medium">${result.roomId}</span></td>
             <td class="p-2"><span class="font-medium">${result.roundId}</span></td>
@@ -107,6 +117,7 @@ function getPredictionClass(prediction) {
             return 'PredictionUnknown'; // for when there's no match
     }
 }
+
 function DrawLastResults(results) {
     $('#lastresults').fadeOut()
     $('#lastresults').empty()
@@ -132,6 +143,7 @@ function DrawHitOrMiss(results) {
         $('#lastresults').append($(`<td>${item.gameResult.toFixed(2)} </td>`))
     }
 }
+
 function markUnderPredictions(results, predictions) {
     for (const result of results) {
         let predictionIndex = predictions.findIndex(prediction => prediction.roundId === result.roundId);
@@ -288,7 +300,10 @@ function sseInit() {
                     if (q.results.length === 0) {
                         return;
                     }
+                    console.log(msg)
+
                     DrawPredictionTable(q.results[0])
+                    DrawTeaCup(msg.teaCup)
                     UpdateData(+$('#limit-input').val());
                     UpdateTableData(+$('#limit-input2').val());
                 });

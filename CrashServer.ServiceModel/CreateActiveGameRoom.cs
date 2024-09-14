@@ -4,6 +4,7 @@ namespace CrashServer.ServiceModel;
 public class NotifyLiveViewDataUpdatedPacket
 {
     public int Id { get; set; }
+    public bool TeaCup { get; set; }
 }
 
 [ValidateApiKey("api:writegamedata")]
@@ -11,6 +12,7 @@ public class NotifyLiveViewDataUpdatedPacket
 public class NotifyLiveViewDataUpdatedRequest : IReturn<NotifyLiveViewDataUpdatedResponse>
 {
     public int Id { get; set; }
+    public bool TeaCup { get; set; }
 }
 
 
