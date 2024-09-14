@@ -13,14 +13,12 @@ from predictCrash.get_game_data import get_next_game
 from predictCrash.kalman import predict_next_kalman
 
 from predictCrash.service_stack_client import create_client
+from teacup import detect_enders_teacup
 
 client = create_client()
 import matplotlib.pyplot as plt
-import random
-import string
 
 decimal_0 = decimal.Decimal(0)
-from discord_webhook import DiscordWebhook, DiscordEmbed
 
 webhook_url = os.environ.get('WEBHOOK_DISCORD', None)
 if webhook_url is None:
@@ -29,6 +27,14 @@ if webhook_url is None:
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 yellow = 'FFFF00'
+blue = '03b2f8'
+
+# Example usage
+numbers = [1, 57, 49, 47]  # Replace with your actual numbers
+if detect_pattern(numbers):
+    print("Pattern detected!")
+else:
+    print("Pattern not detected.")
 
 
 def send_predictions_to_discord(last_game, room_id, arima_result, kalman_result, decimal_result_3, decimal_result4,
@@ -54,28 +60,35 @@ def send_predictions_to_discord(last_game, room_id, arima_result, kalman_result,
         webhook = DiscordWebhook(url=webhook_url)
 
         # each field as a separate embed
-
+        teacup_detect = detect_enders_teacup(last_5_results[-4:])
         embed_last_games = DiscordEmbed(title="Last 5 games",
                                         description=f", ".join(last_3_games),
                                         color=yellow)
+        teacup = "Yes" if teacup_detect else "No"
+
+        teacup_color = blue if teacup_detect else yellow
+        embed_teacup = DiscordEmbed(title="Teacup Detected:",
+                                    description=f"{teacup}",
+                                    color=teacup_color)
+
         embed_last_std = DiscordEmbed(title="Last 5 Std Dev",
                                       description=" " + f", ".join(last_3_std_dev),
                                       color=yellow)
-        color_arima_result = '03b2f8' if arima_result >= 2 else 'FF0000'
+        color_arima_result = blue if arima_result >= 2 else 'FF0000'
         embed_arima_result = DiscordEmbed(title="Arima Result", description=f"{arima_result}", color=color_arima_result)
-        color_kalman_result = '03b2f8' if kalman_result >= 2 else 'FF0000'
+        color_kalman_result = blue if kalman_result >= 2 else 'FF0000'
         embed_kalman_result = DiscordEmbed(title="Kalman Result", description=f"{kalman_result}",
                                            color=color_kalman_result)
-        color_decimal_result_3 = '03b2f8' if decimal_result_3 >= 2 else 'FF0000'
+        color_decimal_result_3 = blue if decimal_result_3 >= 2 else 'FF0000'
         embed_decimal_result_3 = DiscordEmbed(title="Prediction 3 (weighted)", description=f"{decimal_result_3}",
                                               color=color_decimal_result_3)
-        color_decimal_result4 = '03b2f8' if decimal_result4 >= 2 else 'FF0000'
+        color_decimal_result4 = blue if decimal_result4 >= 2 else 'FF0000'
         embed_decimal_result4 = DiscordEmbed(title="Prediction 4", description=f"{decimal_result4}",
                                              color=color_decimal_result4)
-        color_std_dev = '03b2f8' if std_dev >= 8 else 'FF0000'
+        color_std_dev = blue if std_dev >= 8 else 'FF0000'
         embed_std_dev = DiscordEmbed(title="Std Dev", description=f"{std_dev}", color=color_std_dev)
 
-        color_last_game = '03b2f8' if last_game.game_result >= 1.6 else 'FF0000'
+        color_last_game = blue if last_game.game_result >= 1.6 else 'FF0000'
         embed_last_game_result = DiscordEmbed(title=f"----ROUND :{last_game.round_id}----\n",
                                               description=f"Result: {last_game.game_result}\n"
                                                           f"Next Game is {last_game.round_id + 1}",
@@ -86,8 +99,10 @@ def send_predictions_to_discord(last_game, room_id, arima_result, kalman_result,
         webhook.add_embed(embed_last_std)
 
         webhook.add_embed(embed_last_games)
-        # webhook.add_embed(embed_arima_result)
-        # webhook.add_embed(embed_kalman_result)
+        webhook.add_embed(embed_teacup)
+
+        webhook.add_embed(embed_kalman_result)
+
         webhook.add_embed(embed_decimal_result_3)
         webhook.add_embed(embed_decimal_result4)
         webhook.add_embed(embed_std_dev)

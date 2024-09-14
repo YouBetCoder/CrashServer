@@ -1,10 +1,9 @@
 from dotenv import load_dotenv
+
 load_dotenv()
 
 from predictCrash.wait_and_predict import wait_and_predict
 import os
-
-print(os.environ)
 
 
 def main():
