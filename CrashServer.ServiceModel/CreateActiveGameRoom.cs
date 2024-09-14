@@ -81,4 +81,5 @@ public class ActiveGameResult
     public decimal Prediction3 { get; set; }
     public decimal Prediction4 { get; set; }
     public decimal PredictionArima { get; set; }
+    public long NoMoreBetsAt { get; set; }
 }

@@ -1,33 +1,14 @@
 import decimal
 from typing import List
 
-from servicestack import JsonServiceClient
 from dotenv import load_dotenv
 
-from predictCrash.dtos import ApiQueryActiveGameRoom, ApiQueryActiveRoomPredictionResults, ActiveGameResult
+load_dotenv()
+from get_all_game_results import get_all_game_results
+from predictCrash.dtos import ActiveGameResult
 from teacup import detect_enders_teacup
 
-load_dotenv()
-import os
-
-host = os.environ.get("HOST", 'https://localhost:5001')
-host_key = os.environ.get("APIKEY", None)
-
-client = JsonServiceClient(host)
-client.set_bearer_token(host_key)
-
-client.headers['X-Api-Key'] = host_key
-
-response = client.get(ApiQueryActiveRoomPredictionResults(), args={'OrderByDesc': 'Id', 'Take': 1000})
-results = []
-print(f"total records {response.total}")
-skip = 0
-while len(response.results) > 0:
-    results = results + response.results
-    skip = skip + 1000
-    response = client.get(ApiQueryActiveRoomPredictionResults(), args={'OrderByDesc': 'Id', 'Take': 1000, 'Skip': skip})
-
-results.sort(key=lambda x: x.active_game_room_round_id, reverse=False)
+results = get_all_game_results()
 
 success = 0
 fail = 0

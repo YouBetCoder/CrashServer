@@ -41,11 +41,15 @@ class ActiveGameRoomPrediction:
     prediction_arima: Decimal = decimal.Decimal(0)
 
 
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class IdentityUser(IdentityUser1[str]):
+    pass
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
-class ApplicationUser():
+class ApplicationUser(IdentityUser):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     display_name: Optional[str] = None
