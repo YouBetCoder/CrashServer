@@ -113,14 +113,15 @@ function DrawLastResults(results) {
     $('#lastresults').fadeIn()
 
     for (const item of results.reverse()) {
+        debugger;
         const predictionClass = getPredictionClass(item.predictionHit)
         const safePredictionClass = getPredictionClass(item.SafeHit)
         $('#lastresults').append($(` <td>
            <div class="std-dev"><span class="font-bold">Round Id:</span> ${item.roundId}</div>
            <div class="game-result">${item.gameResult.toFixed(2)}</div>
-            <div class="${predictionClass}">Exact: ${item.predictionHit} - ${item.predictionText}</div>
+            <div class="${predictionClass}">Exact  ${item.predictionText}</div>
             <div class="std-dev"><span class="font-bold">Std Dev:</span> ${item.stdDev}</div>
-            <div class="${safePredictionClass}">Safe? : ${item.SafeHit} - ${item.SafeText}</div>
+            <div class="${safePredictionClass}">Safe  ${item.SafeText}</div>
  </td>`))
     }
 }
@@ -153,25 +154,25 @@ function markUnderPredictions(results, predictions) {
         // Determine predictionHit and predictionText
         if (pred2Hit && pred3Hit && pred4Hit) {
             result.predictionHit = "All";
-            result.predictionText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+            result.predictionText = `All : ${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
         } else if (pred2Hit && pred3Hit) {
             result.predictionHit = "Prediction2and3";
-            result.predictionText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}`;
+            result.predictionText = `2 , 3 : ${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}`;
         } else if (pred2Hit && pred4Hit) {
             result.predictionHit = "Prediction2and4";
-            result.predictionText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+            result.predictionText = `2 , 4 : ${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
         } else if (pred3Hit && pred4Hit) {
             result.predictionHit = "Prediction3and4";
-            result.predictionText = `${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+            result.predictionText = `3 , 4 :${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
         } else if (pred2Hit) {
             result.predictionHit = "Prediction2";
-            result.predictionText = `${foundPrediction.prediction2.toFixed(2)}`;
+            result.predictionText = `2 : ${foundPrediction.prediction2.toFixed(2)}`;
         } else if (pred3Hit) {
             result.predictionHit = "Prediction3";
-            result.predictionText = `${foundPrediction.prediction3.toFixed(2)}`;
+            result.predictionText = `3 : ${foundPrediction.prediction3.toFixed(2)}`;
         } else if (pred4Hit) {
             result.predictionHit = "Prediction4";
-            result.predictionText = `${foundPrediction.prediction4.toFixed(2)}`;
+            result.predictionText = `4 : ${foundPrediction.prediction4.toFixed(2)}`;
         } else {
             result.predictionHit = "None";
             result.predictionText = '';
@@ -185,25 +186,25 @@ function markUnderPredictions(results, predictions) {
         // Determine SafeHit and SafeText
         if (safe2 && safe3 && safe4) {
             result.SafeHit = "All";
-            result.SafeText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+            result.SafeText = `All : ${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
         } else if (safe2 && safe3) {
             result.SafeHit = "Prediction2and3";
-            result.SafeText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}`;
+            result.SafeText = `2 , 3 : ${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}`;
         } else if (safe2 && safe4) {
             result.SafeHit = "Prediction2and4";
-            result.SafeText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+            result.SafeText = `2 , 4 : ${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
         } else if (safe3 && safe4) {
             result.SafeHit = "Prediction3and4";
-            result.SafeText = `${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+            result.SafeText = `3 , 4 : ${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
         } else if (safe2) {
             result.SafeHit = "Prediction2";
-            result.SafeText = `${foundPrediction.prediction2.toFixed(2)}`;
+            result.SafeText = `2 : ${foundPrediction.prediction2.toFixed(2)}`;
         } else if (safe3) {
             result.SafeHit = "Prediction3";
-            result.SafeText = `${foundPrediction.prediction3.toFixed(2)}`;
+            result.SafeText = `3 : ${foundPrediction.prediction3.toFixed(2)}`;
         } else if (safe4) {
             result.SafeHit = "Prediction4";
-            result.SafeText = `${foundPrediction.prediction4.toFixed(2)}`;
+            result.SafeText = `4 : ${foundPrediction.prediction4.toFixed(2)}`;
         } else {
             result.SafeHit = "None";
             result.SafeText = '';
