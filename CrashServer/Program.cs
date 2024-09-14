@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.EntityFrameworkCore;
 using ServiceStack;
-using CrashServer.Data;
 using CrashServer.ServiceInterface;
+using CrashServer.ServiceModel.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,26 +25,26 @@ services.AddIdentity<ApplicationUser, IdentityRole>(options => {
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-    
-services.AddAuthentication(IISDefaults.AuthenticationScheme)
-    .AddFacebook(options => { /* Create App https://developers.facebook.com/apps */
-        options.AppId = config["oauth.facebook.AppId"]!;
-        options.AppSecret = config["oauth.facebook.AppSecret"]!;
-        options.SaveTokens = true;
-        options.Scope.Clear();
-        config.GetSection("oauth.facebook.Permissions").GetChildren()
-            .Each(x => options.Scope.Add(x.Value!));
-    })
-    .AddGoogle(options => { /* Create App https://console.developers.google.com/apis/credentials */
-        options.ClientId = config["oauth.google.ConsumerKey"]!;
-        options.ClientSecret = config["oauth.google.ConsumerSecret"]!;
-        options.SaveTokens = true;
-    })
-    .AddMicrosoftAccount(options => { /* Create App https://apps.dev.microsoft.com */
-        options.ClientId = config["oauth.microsoft.AppId"]!;
-        options.ClientSecret = config["oauth.microsoft.AppSecret"]!;
-        options.SaveTokens = true;
-    });
+
+services.AddAuthentication(IISDefaults.AuthenticationScheme);
+    // .AddFacebook(options => { /* Create App https://developers.facebook.com/apps */
+    //     options.AppId = config["oauth.facebook.AppId"]!;
+    //     options.AppSecret = config["oauth.facebook.AppSecret"]!;
+    //     options.SaveTokens = true;
+    //     options.Scope.Clear();
+    //     config.GetSection("oauth.facebook.Permissions").GetChildren()
+    //         .Each(x => options.Scope.Add(x.Value!));
+    // })
+    // .AddGoogle(options => { /* Create App https://console.developers.google.com/apis/credentials */
+    //     options.ClientId = config["oauth.google.ConsumerKey"]!;
+    //     options.ClientSecret = config["oauth.google.ConsumerSecret"]!;
+    //     options.SaveTokens = true;
+    // })
+    // .AddMicrosoftAccount(options => { /* Create App https://apps.dev.microsoft.com */
+    //     options.ClientId = config["oauth.microsoft.AppId"]!;
+    //     options.ClientSecret = config["oauth.microsoft.AppSecret"]!;
+    //     options.SaveTokens = true;
+    // });
     
 services.Configure<ForwardedHeadersOptions>(options => {
     //https://github.com/aspnet/IISIntegration/issues/140#issuecomment-215135928

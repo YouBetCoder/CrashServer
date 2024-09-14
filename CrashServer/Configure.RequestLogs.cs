@@ -13,6 +13,7 @@ public class ConfigureRequestLogs : IHostingStartup
                 services.AddPlugin(new RequestLogsFeature
                 {
                     EnableResponseTracking = true,
+                        EnableErrorTracking = true,
                 });
             }
         });

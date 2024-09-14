@@ -1,4 +1,5 @@
-﻿using ServiceStack;
+﻿using CrashServer.ServiceModel.Data;
+using ServiceStack;
 using ServiceStack.DataAnnotations;
 
 namespace CrashServer.ServiceModel;
@@ -13,7 +14,6 @@ public class ActiveGameRoomPrediction
     [Index] public int RoomId { get; set; }
 
 
- 
     [ForeignKey(typeof(ActiveGameRoom), OnDelete = "SET NULL", OnUpdate = "SET NULL")]
 
     public int? ActiveGameRoomId { get; set; }
@@ -27,7 +27,6 @@ public class ActiveGameRoomPrediction
     public decimal Prediction4 { get; set; }
     public decimal PredictionArima { get; set; }
 }
-
 
 [ValidateApiKey("api:writegamedata")]
 public class CreateActiveGameRoomPrediction : ICreateDb<ActiveGameRoomPrediction>, IReturn<IdResponse>
@@ -57,4 +56,55 @@ public class QueryActiveGameRoomPrediction : QueryDb<ActiveGameRoomPrediction>
     public int? Id { get; set; }
     public int? RoundId { get; set; }
     public int[] RoundIds { get; set; }
+}
+
+public class ApplicationUserPaymentLog
+{
+    [AutoIncrement] public int Id { get; set; }
+    public DateTime PaymentCoversFrom { get; set; } = DateTime.Now;
+    public DateTime PaymentCoversUntil { get; set; } = DateTime.Now.AddDays(7);
+
+    [IntlNumber(Currency = NumberCurrency.USD)]
+    public decimal CostUsd { get; set; }
+
+    public decimal CostSol { get; set; }
+
+    [Ref(Model = nameof(ApplicationUser), RefId = nameof(ApplicationUser.UserName), RefLabel = nameof(ApplicationUser.UserName))]
+    [References(typeof(ApplicationUser))]
+    public string? ApplicationUserId { get; set; }
+
+    [Reference] public ApplicationUser ApplicationUser { get; set; } = default!;
+
+    public string Notes { get; set; } = default!;
+}
+
+[Authenticate]
+[RequiredRole("Admin")]
+public class QueryApplicationUserPaymentLog : QueryDb<ApplicationUserPaymentLog>
+{
+    public int? Id { get; set; }
+    public DateTime? PaymentCoversFrom { get; set; } 
+    public DateTime? PaymentCoversUntil { get; set; } 
+    public string? ApplicationUserId { get; set; }
+}
+ 
+[Authenticate]
+[RequiredRole("Admin")]
+public class CreateApplicationUserPaymentLog : ICreateDb<ApplicationUserPaymentLog>, IReturn<IdResponse>
+{
+    // public DateTime PaymentCoversFrom { get; set; } = DateTime.Now;
+    // public DateTime PaymentCoversUntil { get; set; } = DateTime.Now.AddDays(7);
+    //
+    // [IntlNumber(Currency = NumberCurrency.USD)]
+    // public decimal CostUsd { get; set; }
+    //
+    // public decimal CostSol { get; set; }
+    //
+    // [Ref(Model = nameof(ApplicationUser), RefId = nameof(ApplicationUser.UserName), RefLabel = nameof(ApplicationUser.UserName))]
+    // [References(typeof(ApplicationUser))]
+    // public string? ApplicationUserId { get; set; }
+    //
+    // [Reference] public ApplicationUser ApplicationUser { get; set; } = default!;
+    //
+    // public string Notes { get; set; } = default!;
 }

@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.Testing;
-using CrashServer.Data;
 using CrashServer.ServiceInterface;
 using CrashServer.ServiceModel;
 

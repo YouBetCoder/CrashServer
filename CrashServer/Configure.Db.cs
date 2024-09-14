@@ -1,7 +1,8 @@
+using CrashServer.ServiceInterface;
+using CrashServer.ServiceModel.Data;
 using Microsoft.EntityFrameworkCore;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
-using CrashServer.Data;
 using ServiceStack;
 
 [assembly: HostingStartup(typeof(CrashServer.ConfigureDb))]

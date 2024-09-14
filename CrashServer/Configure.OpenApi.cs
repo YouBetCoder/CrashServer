@@ -1,3 +1,4 @@
+using CrashServer.ServiceModel.Data;
 using ServiceStack;
 
 [assembly: HostingStartup(typeof(CrashServer.ConfigureOpenApi))]
@@ -15,7 +16,7 @@ public class ConfigureOpenApi : IHostingStartup
                 services.AddSwaggerGen();
 
                 services.AddServiceStackSwagger();
-                services.AddBasicAuth<Data.ApplicationUser>();
+                services.AddBasicAuth<ApplicationUser>();
                 //services.AddJwtAuth();
 
                 services.AddTransient<IStartupFilter, StartupFilter>();

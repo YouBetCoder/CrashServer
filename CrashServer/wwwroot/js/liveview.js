@@ -42,11 +42,12 @@ function drawDonut(results) {
 function DrawPredictionTable(result) {
     console.log(result)
     $('#activePrediction').html(`
-            <td>${result.roomId}</td>
-            <td>${result.roundId}</td>
-            <td>${result.prediction.toFixed(2)}</td>
-            <td>${result.prediction3.toFixed(2)}</td>
-            <td>${result.prediction4.toFixed(2)}</td>
+            <td class="p-2"><span class="font-medium">${result.roomId}</span></td>
+            <td class="p-2"><span class="font-medium">${result.roundId}</span></td>
+            <td class="p-2"><span class="font-medium">${result.prediction.toFixed(2)}</span></td>
+            <td class="p-2"><span class="font-medium">${result.prediction2.toFixed(2)}</span></td>
+            <td class="p-2"><span class="font-medium">${result.prediction3.toFixed(2)}</span></td>
+            <td class="p-2"><span class="font-medium">${result.prediction4.toFixed(2)}</span></td>
     `)
 }
 
@@ -54,8 +55,8 @@ function UpdateTableData(limit) {
     if (isNaN(+limit)) {
         return;
     }
-    if (limit > 10) {
-        limit = 10;
+    if (limit > 25) {
+        limit = 25;
     }
     if (limit < 0) {
         limit = 0;
@@ -84,20 +85,28 @@ function UpdateTableData(limit) {
 function getPredictionClass(prediction) {
     switch (prediction) {
         case 'Unknown':
+        case 'Not Found':
             return 'PredictionUnknown';
         case 'None':
             return 'PredictionNone';
+        case 'Prediction2':
+            return 'PredictionPrediction2';
         case 'Prediction3':
             return 'PredictionPrediction3';
         case 'Prediction4':
             return 'PredictionPrediction4';
-        case 'Both':
-            return 'PredictionBoth';
+        case 'Prediction2and3':
+            return 'PredictionPrediction2and3';
+        case 'Prediction2and4':
+            return 'PredictionPrediction2and4';
+        case 'Prediction3and4':
+            return 'PredictionPrediction3and4';
+        case 'All':
+            return 'PredictionAll';
         default:
             return 'PredictionUnknown'; // for when there's no match
     }
 }
-
 function DrawLastResults(results) {
     $('#lastresults').fadeOut()
     $('#lastresults').empty()
@@ -122,43 +131,77 @@ function DrawHitOrMiss(results) {
         $('#lastresults').append($(`<td>${item.gameResult.toFixed(2)} </td>`))
     }
 }
-
 function markUnderPredictions(results, predictions) {
-    debugger;
     for (const result of results) {
         let predictionIndex = predictions.findIndex(prediction => prediction.roundId === result.roundId);
         if (predictionIndex === -1) {
             result.predictionHit = "Not Found";
-            result.stdDev = "-"
+            result.stdDev = "-";
             result.predictionText = '';
             result.SafeHit = '';
-            result.SafeText = ''
+            result.SafeText = '';
             continue;
         }
         const foundPrediction = predictions[predictionIndex];
-        result.stdDev = foundPrediction.prediction.toFixed(2)
+        result.stdDev = foundPrediction.prediction.toFixed(2);
 
-        if (foundPrediction.prediction3 < result.gameResult && result.gameResult - foundPrediction.prediction3 <= 1.0 && foundPrediction.prediction4 < result.gameResult && result.gameResult - foundPrediction.prediction4 <= 1.0) {
-            result.predictionHit = "Both";
-            result.predictionText = `${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`
-        } else if (foundPrediction.prediction3 < result.gameResult && result.gameResult - foundPrediction.prediction3 <= 1.0) {
+        // Check predictions
+        const pred2Hit = foundPrediction.prediction2 < result.gameResult && result.gameResult - foundPrediction.prediction2 <= 1.0;
+        const pred3Hit = foundPrediction.prediction3 < result.gameResult && result.gameResult - foundPrediction.prediction3 <= 1.0;
+        const pred4Hit = foundPrediction.prediction4 < result.gameResult && result.gameResult - foundPrediction.prediction4 <= 1.0;
+
+        // Determine predictionHit and predictionText
+        if (pred2Hit && pred3Hit && pred4Hit) {
+            result.predictionHit = "All";
+            result.predictionText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+        } else if (pred2Hit && pred3Hit) {
+            result.predictionHit = "Prediction2and3";
+            result.predictionText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}`;
+        } else if (pred2Hit && pred4Hit) {
+            result.predictionHit = "Prediction2and4";
+            result.predictionText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+        } else if (pred3Hit && pred4Hit) {
+            result.predictionHit = "Prediction3and4";
+            result.predictionText = `${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+        } else if (pred2Hit) {
+            result.predictionHit = "Prediction2";
+            result.predictionText = `${foundPrediction.prediction2.toFixed(2)}`;
+        } else if (pred3Hit) {
             result.predictionHit = "Prediction3";
-            result.predictionText = `${foundPrediction.prediction3.toFixed(2)}`
-        } else if (foundPrediction.prediction4 < result.gameResult && result.gameResult - foundPrediction.prediction4 <= 1.0) {
+            result.predictionText = `${foundPrediction.prediction3.toFixed(2)}`;
+        } else if (pred4Hit) {
             result.predictionHit = "Prediction4";
-            result.predictionText = `${foundPrediction.prediction4.toFixed(2)}`
+            result.predictionText = `${foundPrediction.prediction4.toFixed(2)}`;
         } else {
             result.predictionHit = "None";
             result.predictionText = '';
         }
 
-        if (foundPrediction.prediction3 > 2 && foundPrediction.prediction4 > 2 && result.gameResult > 2) {
-            result.SafeHit = "Both";
+        // Check safe predictions
+        const safe2 = foundPrediction.prediction2 > 2 && result.gameResult > 2;
+        const safe3 = foundPrediction.prediction3 > 2 && result.gameResult > 2;
+        const safe4 = foundPrediction.prediction4 > 2 && result.gameResult > 2;
+
+        // Determine SafeHit and SafeText
+        if (safe2 && safe3 && safe4) {
+            result.SafeHit = "All";
+            result.SafeText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+        } else if (safe2 && safe3) {
+            result.SafeHit = "Prediction2and3";
+            result.SafeText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction3.toFixed(2)}`;
+        } else if (safe2 && safe4) {
+            result.SafeHit = "Prediction2and4";
+            result.SafeText = `${foundPrediction.prediction2.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
+        } else if (safe3 && safe4) {
+            result.SafeHit = "Prediction3and4";
             result.SafeText = `${foundPrediction.prediction3.toFixed(2)}, ${foundPrediction.prediction4.toFixed(2)}`;
-        } else if (foundPrediction.prediction3 > 2 && result.gameResult > 2) {
+        } else if (safe2) {
+            result.SafeHit = "Prediction2";
+            result.SafeText = `${foundPrediction.prediction2.toFixed(2)}`;
+        } else if (safe3) {
             result.SafeHit = "Prediction3";
             result.SafeText = `${foundPrediction.prediction3.toFixed(2)}`;
-        } else if (foundPrediction.prediction4 > 2 && result.gameResult > 2) {
+        } else if (safe4) {
             result.SafeHit = "Prediction4";
             result.SafeText = `${foundPrediction.prediction4.toFixed(2)}`;
         } else {
@@ -195,14 +238,14 @@ function LiveView() {
     UpdateData(1000);
     $('#room_id').change(function () {
         const room_id = +$(this).val();
-        
+
     })
     $('#limit-input').change(function () {
         const limit = +$(this).val();
         UpdateData(limit);
 
     });
-    UpdateTableData(10);
+    UpdateTableData(14);
     $('#limit-input2').change(function () {
         const limit = +$(this).val();
         UpdateTableData(limit);

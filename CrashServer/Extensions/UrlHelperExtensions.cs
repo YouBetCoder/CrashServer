@@ -11,7 +11,7 @@ public static class UrlHelperExtensions
             action: nameof(AccountController.ConfirmEmail),
             controller: "Account",
             values: new { userId, code },
-            protocol: scheme);
+            protocol: scheme) ?? string.Empty;
     }
 
     public static string ResetPasswordCallbackLink(this IUrlHelper urlHelper, string userId, string code, string scheme)
@@ -20,6 +20,6 @@ public static class UrlHelperExtensions
             action: nameof(AccountController.ResetPassword),
             controller: "Account",
             values: new { userId, code },
-            protocol: scheme);
+            protocol: scheme) ?? string.Empty;
     }
 }

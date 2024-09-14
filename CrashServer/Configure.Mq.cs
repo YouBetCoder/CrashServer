@@ -1,9 +1,9 @@
 using ServiceStack.Messaging;
 using CrashServer.ServiceInterface;
 using CrashServer.ServiceModel;
+using CrashServer.ServiceModel.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using CrashServer.Data;
 using ServiceStack;
 
 [assembly: HostingStartup(typeof(CrashServer.ConfigureMq))]

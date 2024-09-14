@@ -18,7 +18,6 @@ public class AppHost() : AppHostBase("CrashServer"), IHostingStartup
             services.AddHostedService<TimedHostedService>();
 #if DEBUG
 #else
-
             services.AddLettuceEncrypt().PersistDataToDirectory(new DirectoryInfo("/home/crash/crashPredict/crashServer/certs"), "thecertpass");
 
 
@@ -38,7 +37,7 @@ public class AppHost() : AppHostBase("CrashServer"), IHostingStartup
         LogManager.LogFactory = new ConsoleLogFactory(debugEnabled: true); //or console log
         OrmLiteConfig.BeforeExecFilter = dbCmd => { Console.WriteLine(dbCmd.GetDebugString()); };
 #else
-
+LogManager.LogFactory = new ConsoleLogFactory( );
 #endif
         //Allow Referencing in #Script expressions, e.g. [Input(EvalAllowableEntries)]
         ScriptContext.Args[nameof(AppData)] = AppData.Instance;

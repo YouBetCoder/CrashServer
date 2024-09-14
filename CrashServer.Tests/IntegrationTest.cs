@@ -1,7 +1,6 @@
 using Funq;
 using ServiceStack;
 using NUnit.Framework;
-using CrashServer.Data;
 using CrashServer.ServiceInterface;
 using CrashServer.ServiceModel;
 

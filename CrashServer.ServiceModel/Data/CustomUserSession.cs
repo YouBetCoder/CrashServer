@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using ServiceStack;
 using ServiceStack.Web;
 
-namespace CrashServer.Data;
+namespace CrashServer.ServiceModel.Data;
 
 public class CustomUserSession : AuthUserSession
 {

@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using CrashServer.Data;
 using CrashServer.Migrations;
+using CrashServer.ServiceInterface;
 using CrashServer.ServiceModel;
+using CrashServer.ServiceModel.Data;
 using ServiceStack;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;

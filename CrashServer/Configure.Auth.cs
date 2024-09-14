@@ -1,8 +1,8 @@
 using System.Security.Claims;
+using CrashServer.ServiceModel.Data;
 using Microsoft.AspNetCore.Identity;
 using ServiceStack;
 using ServiceStack.Auth;
-using CrashServer.Data;
 using ServiceStack.Text;
 
 [assembly: HostingStartup(typeof(CrashServer.ConfigureAuth))]

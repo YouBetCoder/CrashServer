@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using CrashServer.Extensions;
 using CrashServer.Models.ManageViewModels;
-using CrashServer.Data;
+using CrashServer.ServiceModel.Data;
 
 namespace CrashServer.Controllers;
 

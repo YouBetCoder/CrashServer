@@ -7,7 +7,7 @@ namespace CrashServer.Controllers;
 
 [Authorize]
 
-public class DataController(MarkdownBlog blog, IWebHostEnvironment env) : ServiceStackController
+public class DataController( IWebHostEnvironment env) : ServiceStackController
 {
  
 

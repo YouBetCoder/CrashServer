@@ -15,32 +15,27 @@
 
     <!-- Responsive grid -->
     <div class="lg:grid lg:grid-cols-2 gap-4 ">
-
-
         <div class="md:grid md:grid-cols-2 gap-4">
             <div class=" border-2 border-gray-200 rounded overflow-hidden shadow-lg" id="graph"></div>
             <!-- ActiveGameRoomPrediction Table -->
             <div>
-                <div>
-                    <span>Room:</span>
-                    <input id="room_id" type="number" class="border rounded pl-2" value="1" min="0" max="20" disabled/>
-                </div>
+              
                 <table class="table-auto w-full border-2 border-gray-200 rounded overflow-hidden shadow-lg">
                     <thead>
-                    <tr class=" font-bold ">
-
-                        <th class="p-2">Room ID</th>
-                        <th class="p-2">Round ID</th>
-                        <th class="p-2">Std Deviation</th>
-                        <th class="p-2">Prediction3</th>
-                        <th class="p-2">Prediction4</th>
+                    <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">Room Id</th>
+                        <th class="py-3 px-6 text-left">Round ID</th>
+                        <th class="py-3 px-6 text-right">Std Deviation</th>
+                        <th class="py-3 px-6 text-right">Prediction2</th>
+                        <th class="py-3 px-6 text-right">Prediction3</th>
+                        <th class="py-3 px-6 text-right">Prediction4</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr id="activePrediction">
-
+                    <tr id="activePrediction" class="bg-white border-b border-gray-200 hover:bg-gray-100">
                     </tr>
                     </tbody>
+
                 </table>
             </div>
 
@@ -49,16 +44,13 @@
         <div class="col-span-6 md:col-span-4 sm:col-span-1">
             <div>
                 <span>Limit:</span>
-                <input id="limit-input2" type="number" class="border rounded pl-2" value="10" min="0" max="10"/>
+                <input id="limit-input2" type="number" class="border rounded pl-2" value="14" min="0" max="25"/>
             </div>
         </div>
         <!-- Data Tables -->
-
+       
         <div class="h-auto w-full lg:order-2 order-1">
             <div class="space-y-4">
-
-
-                <!-- Last 6 Results Table -->
                 <table class="table-auto w-full border-1 border-gray-200 rounded overflow-hidden shadow-lg excel-table">
                     <thead>
                     <tr class="bg-gray-300 font-bold">
@@ -66,13 +58,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr id="lastresults">
+                    <tr id="lastresults" class="flex flex-wrap">
+
 
                     </tr>
                     </tbody>
                 </table>
 
-
+        
             </div>
         </div>
     </div>
@@ -107,31 +100,50 @@
         </div>
     </div>
 </div>
-
 <style>
     .PredictionUnknown {
-        background-color: #FCD34D;  
+        background-color: #FCD34D;
+        color: black;
     }
 
     .PredictionNone {
-        background-color: #EF4444;  
-    color: whitesmoke;
+        background-color: #EF4444;
+        color: whitesmoke;
+    }
+
+    .PredictionPrediction2 {
+        background-color: #3B82F6;
+        color: whitesmoke;
     }
 
     .PredictionPrediction3 {
-        background-color: #6366F1;  
-    color: whitesmoke;
+        background-color: #6366F1;
+        color: whitesmoke;
     }
 
     .PredictionPrediction4 {
-        background-color: #A855F7; 
-    color: whitesmoke;
+        background-color: #A855F7;
+        color: whitesmoke;
     }
 
-    .PredictionBoth {
-        background-color: #10B981;  
-    color: whitesmoke;
+    .PredictionPrediction2and3 {
+        background-color: #059669;
+        color: whitesmoke;
+    }
+
+    .PredictionPrediction2and4 {
+        background-color: #7C3AED;
+        color: whitesmoke;
+    }
+
+    .PredictionPrediction3and4 {
+        background-color: #10B981;
+        color: whitesmoke;
+    }
+
+    .PredictionAll {
+        background-color: #047857;
+        color: whitesmoke;
     }
 </style>
-
 <script src="~/js/liveview.js" asp-append-version="true"></script>

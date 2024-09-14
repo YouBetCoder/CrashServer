@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using CrashServer.Extensions;
 using CrashServer.Models.AccountViewModels;
-using CrashServer.Data;
+using CrashServer.ServiceModel.Data;
 using ServiceStack.Mvc;
 
 namespace CrashServer.Controllers;
