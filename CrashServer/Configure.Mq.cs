@@ -15,7 +15,7 @@ public class ConfigureMq : IHostingStartup
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices((context, services) => {
  
-            services.AddSingleton<IMessageService>(c => new BackgroundMqService());
+     //       services.AddSingleton<IMessageService>(c => new BackgroundMqService());
             services.AddPlugin(new CommandsFeature());
         })
         .ConfigureAppHost(afterAppHostInit: appHost => {

@@ -1,7 +1,12 @@
+#if DEBUG
+#else
+using LettuceEncrypt;
+#endif
 using ServiceStack;
 using ServiceStack.IO;
 using ServiceStack.Logging;
 using ServiceStack.OrmLite;
+
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
 [assembly: HostingStartup(typeof(AppHost))]
@@ -14,6 +19,7 @@ public class AppHost() : AppHostBase("CrashServer"), IHostingStartup
         .ConfigureServices((context, services) =>
         {
             services.AddHostedService<TimedHostedService>();
+
 #if DEBUG
 #else
             services.AddLettuceEncrypt().PersistDataToDirectory(new DirectoryInfo("/home/crash/crashPredict/crashServer/certs"), "thecertpass");
@@ -51,21 +57,21 @@ LogManager.LogFactory = new ConsoleLogFactory( );
         var url = txt[(pos + "url = ".Length)..].LeftPart(".git").LeftPart('\n').Trim();
         var gitBaseUrl = url.CombineWith($"blob/main/{srcDir.Name}");
         return gitBaseUrl;
-
     }
 }
 
 public class AppConfig
 {
     public static AppConfig Instance { get; } = new();
+
     // ReSharper disable once UnusedMember.Global
     public string LocalBaseUrl { get; set; } = default!;
+
     // ReSharper disable once UnusedMember.Global
     public string PublicBaseUrl { get; set; } = default!;
     public string? GitPagesBaseUrl { get; set; }
 }
 
- 
 // Shared App Data
 public class AppData
 {

@@ -13,6 +13,7 @@ public class ConfigureApiKeys : IHostingStartup
         {
             services.AddPlugin(new ApiKeysFeature
             {
+
                 //admins can give people these. write is restricted.
                 Scopes = [
                     "api:querygamedata",

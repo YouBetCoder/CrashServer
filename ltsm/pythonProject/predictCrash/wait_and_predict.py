@@ -4,15 +4,18 @@ import time
 from typing import List
 
 import numpy
+from servicestack import WebServiceException
 
 from predictCrash.arima import predict_next_decimal_arima
 from predictCrash.dtos import CreateActiveGameRoomPrediction, ApiQueryActiveGameRoom, NotifyLiveViewDataUpdatedRequest
 from predictCrash.fb_prophet import predict_next_result_prophet, predict_next_result_prophet2
 from predictCrash.get_game_data import get_next_game
 from predictCrash.kalman import predict_next_kalman
+from predictCrash.logg import logger
 
 from predictCrash.service_stack_client import create_client
 from predictCrash.teacup import detect_enders_teacup
+import gc
 
 client = create_client()
 import matplotlib.pyplot as plt
@@ -69,7 +72,7 @@ def send_predictions_to_discord(last_game, room_id, arima_result, kalman_result,
         color_arima_result = blue if arima_result >= 2 else 'FF0000'
         embed_arima_result = DiscordEmbed(title="Arima Result", description=f"{arima_result}", color=color_arima_result)
         color_kalman_result = blue if kalman_result >= 2 else 'FF0000'
-        embed_kalman_result = DiscordEmbed(title="Kalman Result", description=f"{kalman_result}",
+        embed_kalman_result = DiscordEmbed(title="Prediction 2", description=f"{kalman_result}",
                                            color=color_kalman_result)
         color_decimal_result_3 = blue if decimal_result_3 >= 2 else 'FF0000'
         embed_decimal_result_3 = DiscordEmbed(title="Prediction 3 (weighted)", description=f"{decimal_result_3}",
@@ -104,7 +107,9 @@ def send_predictions_to_discord(last_game, room_id, arima_result, kalman_result,
         webhook.execute()
 
     except Exception as e:
-        print(str(e))
+        logger.info(str(e))
+    finally:
+        gc.collect()
 
 
 def check_items(items: List[ApiQueryActiveGameRoom]) -> bool:
@@ -112,9 +117,9 @@ def check_items(items: List[ApiQueryActiveGameRoom]) -> bool:
     current = last_30[0]
     for i in range(1, len(last_30)):
         next = last_30[i]
-        # print(f"{current.round_id} -> {next.round_id}")
+        # logger.info(f"{current.round_id} -> {next.round_id}")
         if current.round_id + 1 != next.round_id:
-            print(f"There are only {i - 1} ordered sequences")
+            logger.info(f"There are only {i - 1} ordered sequences")
             time.sleep(2)
             return False
         current = next
@@ -127,17 +132,17 @@ last_3_std_dev = []
 def wait_and_predict(prev_round_id):
     items, data, last_game, last_round_id = get_next_game(prev_round_id)
     if len(items) < 30:
-        print("Not enough data to make predictions")
+        logger.info("Not enough data to make predictions")
         return False
     if not check_items(items):
-        print("Not enough sequential data to make predictions")
+        logger.info("Not enough sequential data to make predictions")
         return
     if prev_round_id == last_round_id:
         return
     room_id = last_game.room_id
     game_number = last_game.game_number
 
-    print(f"Looking at game {game_number} round {last_round_id} room {room_id}")
+    logger.info(f"Looking at game {game_number} round {last_round_id} room {room_id}")
     last_30 = data[-30:]
     last_302 = data[-30:]
     arima_result = predict_next_decimal_arima(last_30)
@@ -171,23 +176,19 @@ def wait_and_predict(prev_round_id):
     std_dev = numpy.std(last_30)
     while len(last_3_std_dev) > 4:
         last_3_std_dev.pop()
-    last_3_std_dev.append(str(std_dev))
-    # # decimal_result3 = weighted_average(data[:-100])
+    last_3_std_dev.append(str(round(std_dev, 2)))
     decimal_result_3 = predict_next_result_prophet2(last_302)
     decimal_result4 = predict_next_result_prophet(last_30)
-    # if isinstance(next_result4, numpy.float32):
-    #     decimal_result4 = Decimal(float(next_result4))
-    # else:
-    #     decimal_result4 = Decimal(float(next_result4[0][0]))
 
     teacup_detect = detect_enders_teacup(last_5[-4:])
     last_three_results = list(map(str, last_30[-5:]))
-    send_predictions_to_discord(last_game, room_id, arima_result, kalman_result, decimal_result_3, decimal_result4,
+    send_predictions_to_discord(last_game, room_id, arima_result, round(kalman_result, 2), round(decimal_result_3, 2),
+                                round(decimal_result4, 2),
                                 std_dev, last_three_results, last_3_std_dev, last_5, teacup_detect)
     try:
         result: CreateActiveGameRoomPrediction = CreateActiveGameRoomPrediction(game_number=game_number,
                                                                                 room_id=room_id,
-                                                                                active_game_room_id=None,
+                                                                                active_game_room_id=room_id,
                                                                                 prediction=std_dev,
                                                                                 round_id=last_game.round_id + 1,
                                                                                 prediction2=kalman_result,
@@ -197,8 +198,11 @@ def wait_and_predict(prev_round_id):
 
         post_result = client.post(result)
         client.post(NotifyLiveViewDataUpdatedRequest(id=int(post_result.id), tea_cup=teacup_detect))
-        print(post_result)
-
+        logger.info(post_result)
+    except WebServiceException as we:
+        logger.error("Error uploading to server", exc_info=1)
+        logger.error(str(we.inner_exception), exc_info=1)
     except Exception as e:
-        print(f"Couldn't upload {str(e)}")
+        logger.error("Error uploading to server", exc_info=1)
+
     return last_round_id

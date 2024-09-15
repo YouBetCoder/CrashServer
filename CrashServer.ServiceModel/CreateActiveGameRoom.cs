@@ -1,10 +1,12 @@
 ﻿using ServiceStack;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
 
 namespace CrashServer.ServiceModel;
+
 public class NotifyLiveViewDataUpdatedPacket
 {
     public int Id { get; set; }
@@ -18,7 +20,6 @@ public class NotifyLiveViewDataUpdatedRequest : IReturn<NotifyLiveViewDataUpdate
     public int Id { get; set; }
     public bool TeaCup { get; set; }
 }
-
 
 public class NotifyLiveViewDataUpdatedResponse;
 
@@ -41,10 +42,8 @@ public class CreateActiveGameRoom : ICreateDb<ActiveGameRoom>, IReturn<IdRespons
 }
 
 [ValidateApiKey("api:querygameprediction")]
-
 public class ApiQueryActiveRoomPredictionResults
     : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin<ActiveGameRoomPrediction, ActiveGameRoom>;
-
 
 [ValidateApiKey("api:querygamedata")]
 public class ApiQueryActiveGameRoom : QueryDb<ActiveGameRoom>
@@ -71,8 +70,9 @@ public class QueryActiveRoomPredictionResults
 
 public class ActiveGameResult
 {
-    public int ActiveGameRoomGameNumber { get; set; }
-    public int ActiveGameRoomRoomId { get; set; }
+    public int Id { get; set; }
+    public int GameNumber { get; set; }
+    public int RoomId { get; set; }
     public int ActiveGameRoomRoundId { get; set; }
     public decimal GameResult { get; set; }
 
