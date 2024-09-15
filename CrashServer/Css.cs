@@ -1,6 +1,3 @@
-#nullable enable
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceStack;
 
 namespace CrashServer;
@@ -18,27 +15,31 @@ public static class Css
     public const string DangerButton = "cursor-pointer inline-flex justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-black focus:ring-red-300 text-white bg-red-600 hover:bg-red-700 focus:ring-red-500 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-500 dark:ring-offset-black";
     public const string LabelClasses = "block text-sm font-medium text-gray-700 dark:text-gray-300";
     public static string InputText => CssUtils.Tailwind.Input("");
+    // ReSharper disable once UnusedMember.Global
     public const string AlertDanger = "mb-2 p-2 px-4 flex items-center rounded text-danger bg-red-100 font-semibold";
+    // ReSharper disable once UnusedMember.Global
     public const string AlertSuccess = "mb-2 p-2 px-4 flex items-center rounded text-success bg-green-100 font-semibold";
 }
-
-public static class CssHtmlExtensions
-{
-    public const string BaseUrl = "https://github.com/NetCoreTemplates/mvc/blob/main";
-
-    public static IHtmlContent SrcComponent(this IHtmlHelper html, string path, string? size = null, string? cls = null) =>
-        html.SrcLink($"/CrashServer/wwwroot/mjs/components/{path}", size, cls);
-     
-    public static IHtmlContent SrcPageView(this IHtmlHelper html, string path, string? size = null, string? cls = null) =>
-        html.SrcLink($"/CrashServer/Views/{path}", size, cls);
-     
-    public static IHtmlContent SrcPageMjs(this IHtmlHelper html, string path, string? size = null, string? cls = null) =>
-        html.SrcLink($"/CrashServer/wwwroot/pages/{path}", size, cls);
-   
-    public static IHtmlContent SrcLink(this IHtmlHelper html, string path, string? size = null, string? cls = null)
-    {
-        size ??= "w-8 h-8";
-        cls ??= "text-slate-300 hover:text-slate-400 dark:text-slate-600 dark:hover:text-slate-500";
-        return html.Raw($"<a href=\"{BaseUrl + path}\" title=\"Source Code\"><svg class=\"{size} {cls}\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"m10 20l4-16m4 4l4 4l-4 4M6 16l-4-4l4-4\"/></svg></a>");
-    }
-}
+//
+// public static class CssHtmlExtensions
+// {
+//     // ReSharper disable once MemberCanBePrivate.Global
+//     public const string BaseUrl = "https://github.com/NetCoreTemplates/mvc/blob/main";
+//
+//     public static IHtmlContent SrcComponent(this IHtmlHelper html, string path, string? size = null, string? cls = null) =>
+//         html.SrcLink($"/CrashServer/wwwroot/mjs/components/{path}", size, cls);
+//      
+//     public static IHtmlContent SrcPageView(this IHtmlHelper html, string path, string? size = null, string? cls = null) =>
+//         html.SrcLink($"/CrashServer/Views/{path}", size, cls);
+//      
+//     public static IHtmlContent SrcPageMjs(this IHtmlHelper html, string path, string? size = null, string? cls = null) =>
+//         html.SrcLink($"/CrashServer/wwwroot/pages/{path}", size, cls);
+//    
+//     // ReSharper disable once MemberCanBePrivate.Global
+//     public static IHtmlContent SrcLink(this IHtmlHelper html, string path, string? size = null, string? cls = null)
+//     {
+//         size ??= "w-8 h-8";
+//         cls ??= "text-slate-300 hover:text-slate-400 dark:text-slate-600 dark:hover:text-slate-500";
+//         return html.Raw($"<a href=\"{BaseUrl + path}\" title=\"Source Code\"><svg class=\"{size} {cls}\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"m10 20l4-16m4 4l4 4l-4 4M6 16l-4-4l4-4\"/></svg></a>");
+//     }
+// }

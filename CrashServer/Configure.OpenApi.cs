@@ -1,7 +1,7 @@
 using CrashServer.ServiceModel.Data;
 using ServiceStack;
 
-[assembly: HostingStartup(typeof(CrashServer.ConfigureOpenApi))]
+[assembly: HostingStartup(typeof(ConfigureOpenApi))]
 
 namespace CrashServer;
 
@@ -10,17 +10,15 @@ public class ConfigureOpenApi : IHostingStartup
     public void Configure(IWebHostBuilder builder) => builder
         .ConfigureServices((context, services) =>
         {
-            if (context.HostingEnvironment.IsDevelopment())
-            {
-                services.AddEndpointsApiExplorer();
-                services.AddSwaggerGen();
+            if (!context.HostingEnvironment.IsDevelopment()) return;
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
 
-                services.AddServiceStackSwagger();
-                services.AddBasicAuth<ApplicationUser>();
-                //services.AddJwtAuth();
+            services.AddServiceStackSwagger();
+            services.AddBasicAuth<ApplicationUser>();
+            //services.AddJwtAuth();
 
-                services.AddTransient<IStartupFilter, StartupFilter>();
-            }
+            services.AddTransient<IStartupFilter, StartupFilter>();
         });
 
     public class StartupFilter : IStartupFilter

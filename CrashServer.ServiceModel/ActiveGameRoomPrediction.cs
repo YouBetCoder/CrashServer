@@ -1,6 +1,9 @@
 ﻿using CrashServer.ServiceModel.Data;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedMember.Global
 
 namespace CrashServer.ServiceModel;
 
@@ -55,7 +58,7 @@ public class QueryActiveGameRoomPrediction : QueryDb<ActiveGameRoomPrediction>
 {
     public int? Id { get; set; }
     public int? RoundId { get; set; }
-    public int[] RoundIds { get; set; }
+    public int[] RoundIds { get; set; } = default!;
 }
 
 public class ApplicationUserPaymentLog

@@ -6,8 +6,8 @@ namespace CrashServer.Controllers;
 
 
 [Authorize]
-
-public class DataController( IWebHostEnvironment env) : ServiceStackController
+//IWebHostEnvironment env
+public class DataController : ServiceStackController
 {
  
 

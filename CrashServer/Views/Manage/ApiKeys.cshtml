@@ -12,7 +12,8 @@
 </div>
 
 @{
+    // ReSharper disable once MoveLocalFunctionAfterJumpStatement
     IHtmlContent ToProps() => Html.Raw(new {
-        info = HostContext.AppHost.GetPlugin<ApiKeysFeature>()?.GetApiKeyInfo(),
+        info = HostContext.AppHost.GetPlugin<ApiKeysFeature>()?.GetApiKeyInfo()
     }.ToJson().HtmlEncode());
 }

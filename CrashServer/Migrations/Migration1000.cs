@@ -1,7 +1,9 @@
-using System.Data;
-using ServiceStack;
 using ServiceStack.DataAnnotations;
 using ServiceStack.OrmLite;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedMember.Global
 
 namespace CrashServer.Migrations;
 

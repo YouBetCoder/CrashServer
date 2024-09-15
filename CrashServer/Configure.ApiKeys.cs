@@ -1,9 +1,8 @@
 using ServiceStack;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
-using ServiceStack.Configuration;
 
-[assembly: HostingStartup(typeof(CrashServer.ConfigureApiKeys))]
+[assembly: HostingStartup(typeof(ConfigureApiKeys))]
 
 namespace CrashServer;
 
@@ -23,8 +22,8 @@ public class ConfigureApiKeys : IHostingStartup
                  //users can create api keys that can read
                 UserScopes = [
                     "api:querygamedata",
-                    "api:querygameprediction",
-                ],
+                    "api:querygameprediction"
+                ]
           
             });
         })
@@ -35,8 +34,8 @@ public class ConfigureApiKeys : IHostingStartup
             feature.InitSchema(db);
             
             // Optional: Create API Key for specified Users on Startup
-            if (feature.ApiKeyCount(db) != 0 || !db.TableExists(IdentityUsers.TableName)) return;
-            // var createApiKeysFor = new [] { "admin@email.com", "manager@email.com" };
+            // if (feature.ApiKeyCount(db) != 0 || !db.TableExists(IdentityUsers.TableName)) return;
+            // // var createApiKeysFor = new [] { "admin@email.com", "manager@email.com" };
             // var users = IdentityUsers.GetByUserNames(db, createApiKeysFor);
             // foreach (var user in users)
             // {

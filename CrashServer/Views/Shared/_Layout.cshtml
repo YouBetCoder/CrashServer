@@ -19,13 +19,14 @@
     <link rel="stylesheet" href="/css/app.css"/>
     <link rel="stylesheet" href="/css/typography.css"/>
 
+    @* ReSharper disable once ArrangeObjectCreationWhenTypeNotEvident *@
     @Html.ImportMap(new()
     {
         ["vue"] = ("/lib/mjs/vue.mjs", "/lib/mjs/vue.min.mjs"),
         ["@servicestack/client"] = ("/lib/mjs/servicestack-client.mjs", "/lib/mjs/servicestack-client.min.mjs"),
         ["@servicestack/vue"] = ("/lib/mjs/servicestack-vue.mjs", "/lib/mjs/servicestack-vue.min.mjs"),
         ["app.mjs"] = ("/mjs/app.mjs", "/mjs/app.mjs"),
-        ["dtos.mjs"] = ("/mjs/dtos.mjs", "/mjs/dtos.mjs"),
+        ["dtos.mjs"] = ("/mjs/dtos.mjs", "/mjs/dtos.mjs")
     })
     @await RenderSectionAsync("head", required: false)
 
@@ -58,10 +59,11 @@
         <div class="flex flex-grow flex-shrink flex-nowrap justify-end items-center">
             <nav hx-boost="true" class="relative flex flex-grow leading-6 font-semibold text-slate-700 dark:text-slate-200">
                 <ul class="flex flex-wrap items-center justify-end w-full pb-2 sm:pb-0 m-0">
+                    @* ReSharper disable once MoveLocalFunctionAfterJumpStatement *@
                     @{
                         var isAuthenticated = await Html.IsAuthenticatedAsync();
                         var isAdmin = await Html.HasRoleAsync("Admin");
-
+                        @* ReSharper disable once MoveLocalFunctionAfterJumpStatement *@
                         async Task RenderNavLink(string controller, string action, string childContent, string? cls = null)
                         {
                             <li class="@Html.ClassNames("relative flex flex-wrap just-fu-start m-0", cls)">
@@ -69,9 +71,10 @@
                                    class="@Html.ClassNames("p-4 flex items-center justify-start mw-full hover:text-sky-500 dark:hover:text-sky-400", Html.MatchesPath(controller) ? "text-blue-700 dark:text-blue-300" : "")">
                                     @Html.Raw(childContent)
                                 </a>
+                               
                             </li>
                         }
-
+                        @* ReSharper disable once MoveLocalFunctionAfterJumpStatement *@
                         async Task RenderLinkButton(string controller, string action, string childContent, string? cls = null)
                         {
                             <li class="relative flex flex-wrap just-fu-start m-0">

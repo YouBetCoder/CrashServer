@@ -3,14 +3,15 @@ using ServiceStack.OrmLite;
 using CrashServer.Migrations;
 using ServiceStack;
 using ServiceStack.Data;
+// ReSharper disable MemberCanBeMadeStatic.Local
 
 namespace CrashServer.Tests;
 
 [TestFixture, Explicit, Category(nameof(MigrationTasks))]
 public class MigrationTasks
 {
-    IDbConnectionFactory ResolveDbFactory() => new ConfigureDb().ConfigureAndResolve<IDbConnectionFactory>();
-    Migrator CreateMigrator() => new(ResolveDbFactory(), typeof(Migration1000).Assembly); 
+    private static IDbConnectionFactory ResolveDbFactory() => new ConfigureDb().ConfigureAndResolve<IDbConnectionFactory>();
+    private static Migrator CreateMigrator() => new(ResolveDbFactory(), typeof(Migration1000).Assembly); 
     
     [Test]
     public void Migrate()

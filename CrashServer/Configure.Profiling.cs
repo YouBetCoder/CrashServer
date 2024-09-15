@@ -1,6 +1,6 @@
 using ServiceStack;
 
-[assembly: HostingStartup(typeof(CrashServer.ConfigureProfiling))]
+[assembly: HostingStartup(typeof(ConfigureProfiling))]
 
 namespace CrashServer;
 
@@ -12,7 +12,7 @@ public class ConfigureProfiling : IHostingStartup
             {
                 services.AddPlugin(new ProfilingFeature
                 {
-                    IncludeStackTrace = true,
+                    IncludeStackTrace = true
                 });
             }
         });

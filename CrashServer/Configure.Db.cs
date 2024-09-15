@@ -1,11 +1,10 @@
 using CrashServer.ServiceInterface;
-using CrashServer.ServiceModel.Data;
 using Microsoft.EntityFrameworkCore;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
 using ServiceStack;
 
-[assembly: HostingStartup(typeof(CrashServer.ConfigureDb))]
+[assembly: HostingStartup(typeof(ConfigureDb))]
 
 namespace CrashServer;
 

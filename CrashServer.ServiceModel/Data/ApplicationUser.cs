@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using ServiceStack.DataAnnotations;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 
 namespace CrashServer.ServiceModel.Data;
 
@@ -8,7 +10,7 @@ namespace CrashServer.ServiceModel.Data;
 [Alias("AspNetUsers")] 
 public class ApplicationUser : IdentityUser
 {
-    public string? FirstName { get; set; }
+    public string? FirstName { get; set; } 
     public string? LastName { get; set; }
     public string? DisplayName { get; set; }
     public string? ProfileUrl { get; set; }

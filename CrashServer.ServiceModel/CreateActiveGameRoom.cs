@@ -1,4 +1,8 @@
 ﻿using ServiceStack;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedMember.Global
 
 namespace CrashServer.ServiceModel;
 public class NotifyLiveViewDataUpdatedPacket
@@ -16,9 +20,7 @@ public class NotifyLiveViewDataUpdatedRequest : IReturn<NotifyLiveViewDataUpdate
 }
 
 
-public class NotifyLiveViewDataUpdatedResponse
-{
-}
+public class NotifyLiveViewDataUpdatedResponse;
 
 [ValidateApiKey("api:writegamedata")]
 [Route("/createdata")]
@@ -41,9 +43,7 @@ public class CreateActiveGameRoom : ICreateDb<ActiveGameRoom>, IReturn<IdRespons
 [ValidateApiKey("api:querygameprediction")]
 
 public class ApiQueryActiveRoomPredictionResults
-    : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin<ActiveGameRoomPrediction, ActiveGameRoom>
-{
-}
+    : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin<ActiveGameRoomPrediction, ActiveGameRoom>;
 
 
 [ValidateApiKey("api:querygamedata")]
@@ -67,9 +67,7 @@ public class QueryActiveGameRoom : QueryDb<ActiveGameRoom>
 [EnableCors(allowedMethods: "GET,POST")]
 [Route("/query/activeroomprediction", Verbs = "GET")]
 public class QueryActiveRoomPredictionResults
-    : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin<ActiveGameRoomPrediction, ActiveGameRoom>
-{
-}
+    : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin<ActiveGameRoomPrediction, ActiveGameRoom>;
 
 public class ActiveGameResult
 {

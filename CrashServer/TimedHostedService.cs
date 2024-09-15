@@ -29,6 +29,7 @@ public class TimedHostedService(IDbConnectionFactory dbConnectionFactory, ILogge
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         _timer?.Dispose();
     }
 

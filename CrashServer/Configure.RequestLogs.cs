@@ -1,6 +1,6 @@
 using ServiceStack;
 
-[assembly: HostingStartup(typeof(CrashServer.ConfigureRequestLogs))]
+[assembly: HostingStartup(typeof(ConfigureRequestLogs))]
 
 namespace CrashServer;
 
@@ -13,7 +13,7 @@ public class ConfigureRequestLogs : IHostingStartup
                 services.AddPlugin(new RequestLogsFeature
                 {
                     EnableResponseTracking = true,
-                        EnableErrorTracking = true,
+                        EnableErrorTracking = true
                 });
             }
         });

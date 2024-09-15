@@ -1,8 +1,8 @@
-@using CrashServer.ServiceModel.Data
-@inject SignInManager<ApplicationUser> SignInManager
+ 
+ 
 @{
-    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
-    var navItemCss = "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 hover:text-gray-900 dark:hover:text-gray-50 group flex items-center px-4 py-2 text-base font-medium rounded-md mr-2 whitespace-nowrap";
+    // var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    const string navItemCss = "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 hover:text-gray-900 dark:hover:text-gray-50 group flex items-center px-4 py-2 text-base font-medium rounded-md mr-2 whitespace-nowrap";
 }
 
 <ul>
@@ -12,12 +12,12 @@
     <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext)">
         <a class="@navItemCss" asp-action="ChangePassword">Password</a>
     </li>
-    @if (hasExternalLogins)
-    {
-        <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)">
-            <a class="@navItemCss" asp-action="ExternalLogins">External logins</a>
-        </li>
-    }
+    @* @if (hasExternalLogins) *@
+    @* { *@
+    @*     <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)"> *@
+    @*         <a class="@navItemCss" asp-action="ExternalLogins">External logins</a> *@
+    @*     </li> *@
+    @* } *@
     <li class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)">
         <a class="@navItemCss" asp-action="TwoFactorAuthentication">Two-factor authentication</a>
     </li>

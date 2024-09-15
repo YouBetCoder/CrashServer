@@ -1,4 +1,4 @@
-[assembly: HostingStartup(typeof(CrashServer.ConfigureCors))]
+[assembly: HostingStartup(typeof(ConfigureCors))]
 
 namespace CrashServer;
 

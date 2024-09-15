@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.IISIntegration;
-using Microsoft.EntityFrameworkCore;
 using ServiceStack;
 using CrashServer.ServiceInterface;
 using CrashServer.ServiceModel.Data;
@@ -9,16 +8,17 @@ using CrashServer.ServiceModel.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
-var config = builder.Configuration;
+// var config = builder.Configuration;
 services.AddMvc(options => options.EnableEndpointRouting = false);
 
 services.Configure<CookiePolicyOptions>(options =>
 {
     // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-    options.CheckConsentNeeded = context => true;
+    options.CheckConsentNeeded = _ => true;
     options.MinimumSameSitePolicy = SameSiteMode.Strict;
 });
 
+// ReSharper disable once UnusedParameter.Local
 services.AddIdentity<ApplicationUser, IdentityRole>(options => {
         //options.User.AllowedUserNameCharacters = null;
         //options.SignIn.RequireConfirmedAccount = true;
@@ -83,8 +83,8 @@ services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
     options.SlidingExpiration = true;
 });
-
-services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+//
+// services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 // Uncomment to send emails with SMTP, configure SMTP with "SmtpConfig" in appsettings.json
 //services.AddSingleton<IEmailSender<ApplicationUser>, EmailSender>();
 services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AdditionalUserClaimsPrincipalFactory>();

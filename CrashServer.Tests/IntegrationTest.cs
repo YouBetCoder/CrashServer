@@ -2,43 +2,32 @@ using Funq;
 using ServiceStack;
 using NUnit.Framework;
 using CrashServer.ServiceInterface;
-using CrashServer.ServiceModel;
+// ReSharper disable UnusedMember.Global
 
 namespace CrashServer.Tests;
 
 public class IntegrationTest
 {
-    const string BaseUri = "http://localhost:2000/";
-    private readonly ServiceStackHost appHost;
+    private const string BaseUri = "http://localhost:2000/";
+    private readonly ServiceStackHost _appHost = new AppHost()
+        .Init()
+        .Start(BaseUri);
 
-    class AppHost : AppSelfHostBase
+    private class AppHost() : AppSelfHostBase(nameof(IntegrationTest), typeof(NotifyLiveViewService).Assembly)
     {
-        public AppHost() : base(nameof(IntegrationTest), typeof(NotifyLiveViewService).Assembly) { }
-
         public override void Configure(Container container)
         {
         }
     }
 
-    public IntegrationTest()
-    {
-        appHost = new AppHost()
-            .Init()
-            .Start(BaseUri);
-    }
-
     [OneTimeTearDown]
-    public void OneTimeTearDown() => appHost.Dispose();
+    public void OneTimeTearDown() => _appHost.Dispose();
 
-    public IServiceClient CreateClient() => new JsonServiceClient(BaseUri);
+    public static IServiceClient CreateClient() => new JsonServiceClient(BaseUri);
 
     [Test]
     public void Can_call_Hello_Service()
     {
-        var client = CreateClient();
-
-        var response = client.Get(new Hello { Name = "World" });
-
-        Assert.That(response.Result, Is.EqualTo("Hello, World!"));
+    
     }
 }

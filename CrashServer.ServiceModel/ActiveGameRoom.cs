@@ -1,4 +1,5 @@
 ﻿using ServiceStack.DataAnnotations;
+// ReSharper disable UnusedMember.Global
 
 namespace CrashServer.ServiceModel;
 

@@ -12,15 +12,18 @@
     @await Html.PartialAsync("AlertInfo", "If you lose your device and don't have the recovery codes you will lose access to your account.")
 
     <div class="mt-4">
-        @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
+        @if (Model.RecoveryCodes != null)
         {
-            <code class="recovery-code">@Model.RecoveryCodes[row]</code>
+            for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
+            {
+                <code class="recovery-code">@Model.RecoveryCodes[row]</code>
 
-            <text>&nbsp;</text>
+                @:&nbsp;
 
-            <code class="recovery-code">@Model.RecoveryCodes[row + 1]</code>
+                <code class="recovery-code">@Model.RecoveryCodes[row + 1]</code>
 
-            <br />
+                <br/>
+            }
         }
     </div>
 </div>

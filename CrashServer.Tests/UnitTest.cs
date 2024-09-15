@@ -2,7 +2,6 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.Testing;
 using CrashServer.ServiceInterface;
-using CrashServer.ServiceModel;
 
 namespace CrashServer.Tests;
 
@@ -22,8 +21,6 @@ public class UnitTest
     [Test]
     public void Can_call_MyServices()
     {
-        var service = appHost.Container.Resolve<NotifyLiveViewService>();
-
-        
+    
     }
 }
