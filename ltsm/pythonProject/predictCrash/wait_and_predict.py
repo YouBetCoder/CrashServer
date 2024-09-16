@@ -26,6 +26,10 @@ webhook_url = os.environ.get('WEBHOOK_DISCORD', None)
 if webhook_url is None:
     raise RuntimeError("No webhook")
 
+webhook_status_url = os.environ.get('WEBHOOK_DISCORD_STATUS', None)
+if webhook_status_url is None:
+    raise RuntimeError("No  webhook_status_url webhook")
+
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 yellow = 'FFFF00'
@@ -107,9 +111,21 @@ def send_predictions_to_discord(last_game, room_id, arima_result, kalman_result,
         webhook.execute()
 
     except Exception as e:
-        logger.info(str(e))
+        logger.error("Error update main webhook", exc_info=1)
     finally:
         gc.collect()
+
+
+def send_bot_status_message(msg):
+    try:
+        webhook = DiscordWebhook(url=webhook_status_url)
+        embed_teacup = DiscordEmbed(title="BOT STATUS MESSAGE:",
+                                    description=msg,
+                                    color=yellow)
+        webhook.add_embed(embed_teacup)
+        webhook.execute()
+    except Exception as e:
+        logger.error("Error update status webhook", exc_info=1)
 
 
 def check_items(items: List[ApiQueryActiveGameRoom]) -> bool:
@@ -120,7 +136,8 @@ def check_items(items: List[ApiQueryActiveGameRoom]) -> bool:
         # logger.info(f"{current.round_id} -> {next.round_id}")
         if current.round_id + 1 != next.round_id:
             logger.info(f"There are only {i - 1} ordered sequences")
-            time.sleep(2)
+            time.sleep(30)
+            send_bot_status_message(f"Bot is retraining {i - 1} dataz to go")
             return False
         current = next
     return True

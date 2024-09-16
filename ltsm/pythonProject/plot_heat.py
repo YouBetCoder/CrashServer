@@ -22,11 +22,12 @@ webhook_url_dist = os.environ.get('WEBOOK_DISCORD_DIST', None)
 if webhook_url_dist is None:
     raise RuntimeError("No webhook URL (webhook_url_dist) found in environment variables")
 
+
 def post_donut_chart_to_discord(results, title):
     df = pd.DataFrame([
         {
             'game_result': float(r.game_result),
-            'timestamp': datetime.fromtimestamp(r.no_more_bets_at, tz=pytz.UTC),
+            'timestamp': datetime.fromtimestamp(r.time_recorded, tz=pytz.UTC),
             'round_id': r.round_id
         } for r in results
     ])
@@ -98,11 +99,12 @@ def post_donut_chart_to_discord(results, title):
     else:
         print(f"Failed to post to Discord. Status code: {response.status_code}")
 
+
 def post_heatmap_to_discord(results, title):
     df = pd.DataFrame([
         {
             'game_result': float(r.game_result),
-            'timestamp': datetime.fromtimestamp(r.no_more_bets_at, tz=pytz.UTC),
+            'timestamp': datetime.fromtimestamp(r.time_recorded, tz=pytz.UTC),
             'round_id': r.round_id
         } for r in results
     ])
@@ -159,21 +161,93 @@ def post_heatmap_to_discord(results, title):
         print(f"Failed to post to Discord. Status code: {response.status_code}")
 
 
+def post_frequency_heatmap_to_discord(results, title):
+    df = pd.DataFrame([
+        {
+            'game_result': float(r.game_result),
+            'timestamp': datetime.fromtimestamp(r.time_recorded, tz=pytz.UTC),
+            'round_id': r.round_id
+        } for r in results
+    ])
+
+    df = df.sort_values('timestamp')
+    df['hour_utc'] = df['timestamp'].dt.hour
+    df['day_of_week'] = df['timestamp'].dt.dayofweek
+
+    # Create a new column for results over 10
+    df['over_10'] = df['game_result'] > 10
+
+    # Create pivot table for frequency of results over 10
+    pivot = df.pivot_table(
+        values='over_10',
+        index='hour_utc',
+        columns='day_of_week',
+        aggfunc='mean'  # This gives us the proportion of results over 10
+    )
+
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(pivot, cmap='YlOrRd', annot=True, fmt='.2%')  # Format as percentage
+    plt.title('Frequency of Game Results Over 10 by Hour (UTC) and Day of Week')
+    plt.xlabel('Day of Week')
+    plt.ylabel('Hour of Day (UTC)')
+    plt.xticks(range(7), ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
+    plt.yticks(range(0, 24, 2), [f'{h:02d}:00' for h in range(0, 24, 2)])
+    plt.tight_layout()
+
+    image_file = 'heat_map.png'
+    plt.savefig(image_file, format='png', dpi=300, bbox_inches='tight')
+
+    total_games = len(df)
+    games_over_10 = df['over_10'].sum()
+    proportion_over_10 = games_over_10 / total_games
+    highest_hour = pivot.mean(axis=1).idxmax()
+    highest_hour_freq = pivot.mean(axis=1).max()
+    highest_day_index = pivot.mean(axis=0).idxmax()
+    highest_day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][highest_day_index]
+    highest_day_freq = pivot.mean(axis=0).max()
+
+    webhook = DiscordWebhook(url=webhook_url)
+
+    with open(image_file, "rb") as f:
+        webhook.add_file(file=f.read(), filename='heat_map.png')
+
+    embed = DiscordEmbed(title=title, color=242424)
+    embed.set_image(url="attachment://heat_map.png")
+    embed.add_embed_field(name="Total Games", value=f"{total_games}")
+    embed.add_embed_field(name="Games Over 10", value=f"{games_over_10}")
+    embed.add_embed_field(name="Proportion Over 10", value=f"{proportion_over_10:.2%}")
+    embed.add_embed_field(name="Highest Frequency Hour (UTC)", value=f"{highest_hour:02d}:00 ({highest_hour_freq:.2%})")
+    embed.add_embed_field(name="Highest Frequency Day", value=f"{highest_day} ({highest_day_freq:.2%})")
+
+    webhook.add_embed(embed)
+    response = webhook.execute()
+
+    if response.status_code == 200:
+        print("Heatmap and analysis successfully posted to Discord!")
+    else:
+        print(f"Failed to post to Discord. Status code: {response.status_code}")
+
+
 if __name__ == "__main__":
     one_day_ago = get_unix_time_stamp_days_ago(1)
-    one_week_ago = get_unix_time_stamp(7)
-    one_month_ago = get_unix_time_stamp(30)
+    one_week_ago = get_unix_time_stamp_days_ago(7)
+    one_month_ago = get_unix_time_stamp_days_ago(30)
     ten_minutes = get_unix_time_stamp_minutes(10)
-    print(ten_minutes)
-    sys.exit(1)
-    results_hour_ago = get_all_game_results(ten_minutes)
-
-    post_donut_chart_to_discord(results_hour_ago,"Score distribution 1 hour ago")
-    sys.exit(1)
-    results = get_all_game_results(one_week_ago)
+    hour_ago = get_unix_time_stamp_minutes(60)
+    results_hour_ago = get_all_game_results(hour_ago)
+    results_ten_minutes = get_all_game_results(ten_minutes)
+    results_weak = get_all_game_results(one_week_ago)
     results_day = get_all_game_results(one_day_ago)
     results_month = get_all_game_results(one_month_ago)
 
+    post_donut_chart_to_discord(results_day, "Score distribution Last Day")
+    post_donut_chart_to_discord(results_hour_ago, "Score distribution 1 hour ago")
+    post_donut_chart_to_discord(results_ten_minutes, "Score distribution 10 minutes ago")
+
     post_heatmap_to_discord(results_month, "Heat Map Last Month")
-    post_heatmap_to_discord(results, "Heat Map Last Week")
+    post_heatmap_to_discord(results_weak, "Heat Map Last Weak")
+    post_heatmap_to_discord(results_day, "Heat Map Last Day")
+    post_frequency_heatmap_to_discord(results_month, "Frequency Heat Map Last Month")
+    post_frequency_heatmap_to_discord(results_weak, "Frequency Heat Map Last Weak")
+    post_frequency_heatmap_to_discord(results_day, "Frequency Heat Map Last Day")
     post_heatmap_to_discord(results_day, "Heat Map Day")

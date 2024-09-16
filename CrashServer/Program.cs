@@ -21,7 +21,10 @@ services.Configure<CookiePolicyOptions>(options =>
 // ReSharper disable once UnusedParameter.Local
 services.AddIdentity<ApplicationUser, IdentityRole>(options => {
         //options.User.AllowedUserNameCharacters = null;
-        //options.SignIn.RequireConfirmedAccount = true;
+        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedPhoneNumber = false;
+        
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();

@@ -1469,7 +1469,7 @@ const et = class et {
   }
 };
 Le(et, "config", {
-  redirectSignIn: "/signin",
+  redirectSignIn: "/Account/Login",
   redirectSignOut: "/auth/logout",
   navigate: (t) => location.href = t,
   assetsPathResolver: (t) => t,

@@ -48,11 +48,24 @@ public class AccountController(
         if (!ModelState.IsValid) return View(model);
         // This doesn't count login failures towards account lockout
         // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-        var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+        var signedUser = await userManager.FindByEmailAsync(model.Email);
+        if (signedUser == null)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return View(model);
+        }
+
+        if (signedUser.UserName == null)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid account login attempt.");
+            return View(model);
+        }
+
+        var result = await signInManager.PasswordSignInAsync(signedUser.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
         if (result.Succeeded)
         {
             _logger.LogInformation("User logged in");
-            return RedirectToLocal(returnUrl ?? "/home?weirdReturnUrl");
+            return RedirectToLocal(returnUrl ?? "/home");
         }
 
         if (result.RequiresTwoFactor)

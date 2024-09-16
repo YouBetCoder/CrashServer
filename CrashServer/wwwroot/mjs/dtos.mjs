@@ -1,5 +1,5 @@
 /* Options:
-Date: 2024-09-16 09:43:17
+Date: 2024-09-16 13:44:23
 Version: 8.40
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://localhost:5001
@@ -115,7 +115,7 @@ export class ActiveGameRoom {
     gameResult;
     /** @type {number} */
     noMoreBetsAt;
-    /** @type {number} */
+    /** @type {?number} */
     timeRecorded;
 }
 /** @typedef From {any} */
@@ -125,10 +125,10 @@ export class QueryDb_2 extends QueryBase {
     constructor(init) { super(init); Object.assign(this, init) }
 }
 export class ActiveGameResult {
-    /** @param {{activeGameRoomPredictionId?:number,gameNumber?:number,roomId?:number,activeGameRoomRoundId?:number,gameResult?:number,prediction?:number,prediction2?:number,prediction3?:number,prediction4?:number,predictionArima?:number,noMoreBetsAt?:number}} [init] */
+    /** @param {{id?:number,gameNumber?:number,roomId?:number,activeGameRoomRoundId?:number,gameResult?:number,prediction?:number,prediction2?:number,prediction3?:number,prediction4?:number,predictionArima?:number,noMoreBetsAt?:number}} [init] */
     constructor(init) { Object.assign(this, init) }
     /** @type {number} */
-    activeGameRoomPredictionId;
+    id;
     /** @type {number} */
     gameNumber;
     /** @type {number} */

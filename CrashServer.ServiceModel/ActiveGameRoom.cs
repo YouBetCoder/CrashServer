@@ -20,5 +20,5 @@ public class ActiveGameRoom
 
     public long NoMoreBetsAt { get; set; }
 
-    [Index] public long TimeRecorded { get; set; }
+    [Index] public long? TimeRecorded { get; set; }
 }

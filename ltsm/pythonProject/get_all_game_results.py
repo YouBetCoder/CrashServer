@@ -28,7 +28,7 @@ def get_all_game_results(ago):
     client.set_bearer_token(host_key)
     client.headers['X-Api-Key'] = host_key
     response = client.get(ApiQueryActiveGameRoom(room_id=1),
-                          args={'OrderByDesc': 'Id', 'Take': 1000, "noMoreBetsAtGreaterThan": str(ago)
+                          args={'OrderByDesc': 'Id', 'Take': 1000, "timeRecordedGreaterThan": str(ago)
                                 })
     results = []
     print(f"total records {response.total}")
@@ -38,7 +38,7 @@ def get_all_game_results(ago):
         skip = skip + 1000
         response = client.get(ApiQueryActiveGameRoom(room_id=1),
                               args={'OrderByDesc': 'Id', 'Take': 1000, 'Skip': skip,
-                                    "noMoreBetsAtGreaterThan": ago})
+                                    "timeRecordedGreaterThan": ago})
     results.sort(key=lambda x: x.round_id, reverse=False)
     return results
 

@@ -1,4 +1,5 @@
 ﻿using ServiceStack;
+using ServiceStack.DataAnnotations;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
@@ -12,7 +13,7 @@ public class NotifyLiveViewDataUpdatedPacket
     public int Id { get; set; }
     public bool TeaCup { get; set; }
 }
-
+[Exclude(Feature.Metadata)] 
 [ValidateApiKey("api:writegamedata")]
 [Route("/notify")]
 public class NotifyLiveViewDataUpdatedRequest : IReturn<NotifyLiveViewDataUpdatedResponse>
@@ -22,7 +23,7 @@ public class NotifyLiveViewDataUpdatedRequest : IReturn<NotifyLiveViewDataUpdate
 }
 
 public class NotifyLiveViewDataUpdatedResponse;
-
+[Exclude(Feature.Metadata)] 
 [ValidateApiKey("api:writegamedata")]
 [Route("/createdata")]
 public class CreateActiveGameRoom : ICreateDb<ActiveGameRoom>, IReturn<IdResponse>
@@ -65,14 +66,14 @@ public class QueryActiveGameRoom : QueryDb<ActiveGameRoom>
 
 [ValidateApiKey("api:querygameprediction")]
 public class ApiQueryActiveRoomPredictionResults
-    : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin< ActiveGameRoom,ActiveGameRoomPrediction>;
+    : QueryDb<ActiveGameRoom, ActiveGameResult>, IJoin< ActiveGameRoom,ActiveGameRoomPrediction>;
 
 
 [Authenticate]
 [EnableCors(allowedMethods: "GET,POST")]
 [Route("/query/activeroomprediction", Verbs = "GET")]
 public class QueryActiveRoomPredictionResults
-    : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin< ActiveGameRoom,ActiveGameRoomPrediction>;
+    : QueryDb<ActiveGameRoom, ActiveGameResult>, IJoin< ActiveGameRoom,ActiveGameRoomPrediction>;
 
 
 
@@ -80,7 +81,8 @@ public class QueryActiveRoomPredictionResults
  
 public class ActiveGameResult
 {
-    public int ActiveGameRoomPredictionId { get; set; }
+    [Alias("ActiveGameRoomId.Id")]
+    public int Id { get; set; }
     public int GameNumber { get; set; }
     public int RoomId { get; set; }
     public int ActiveGameRoomRoundId { get; set; }

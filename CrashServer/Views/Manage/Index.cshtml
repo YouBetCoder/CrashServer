@@ -23,12 +23,12 @@
                         </div>
                     </div>                            
                     <div>
-                        <label asp-for="Email" class="@Css.LabelClasses"></label>
+                        <label asp-for="Email" class="@Css.LabelClasses" ></label>
                         @if (Model.IsEmailConfirmed)
                         {
                             <div class="input-group">
                                 <div class="mt-1 relative flex">
-                                    <input asp-for="Email" class="@Css.InputText">
+                                    <input asp-for="Email" class="@Css.InputText" disabled>
                                     <div class="ml-4">
                                         <span class="text-xl text-success font-bold">✓</span>
                                     </div>
@@ -56,7 +56,7 @@
                     @*     <span asp-validation-for="PhoneNumber" class="text-danger"></span> *@
                     @* </div>                             *@
                     <div>
-                        <button type="submit" class="@Css.PrimaryButton">Submit</button>
+                        @* <button type="submit" class="@Css.PrimaryButton">Submit</button> *@
                     </div>
                 </div>
             </form>

@@ -13,7 +13,7 @@ results = get_all_game_results()
 df = pd.DataFrame([
     {
         'game_result': float(r.game_result),
-        'timestamp': datetime.fromtimestamp(r.no_more_bets_at, tz=pytz.UTC),
+        'timestamp': datetime.fromtimestamp(r.time_recorded, tz=pytz.UTC),
         'round_id': r.active_game_room_round_id
     } for r in results
 ])

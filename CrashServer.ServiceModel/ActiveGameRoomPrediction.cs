@@ -31,7 +31,7 @@ public class ActiveGameRoomPrediction
     public decimal Prediction4 { get; set; }
     public decimal PredictionArima { get; set; }
 }
-
+[Exclude(Feature.Metadata)] 
 [ValidateApiKey("api:writegamedata")]
 public class CreateActiveGameRoomPrediction : ICreateDb<ActiveGameRoomPrediction>, IReturn<IdResponse>
 {

@@ -1,19 +1,19 @@
 """ Options:
-Date: 2024-09-15 20:33:19
+Date: 2024-09-16 17:15:28
 Version: 8.40
 Tip: To override a DTO option, remove "#" prefix before updating
 BaseUrl: https://crash.digitalstar.co
 
-#GlobalNamespace:
+#GlobalNamespace: 
 #AddServiceStackTypes: True
 #AddResponseStatus: False
-#AddImplicitVersion:
+#AddImplicitVersion: 
 #AddDescriptionAsComments: True
-#IncludeTypes:
-#ExcludeTypes:
+#IncludeTypes: 
+#ExcludeTypes: 
 #DefaultImports: datetime,decimal,marshmallow.fields:*,servicestack:*,typing:*,dataclasses:dataclass/field,dataclasses_json:dataclass_json/LetterCase/Undefined/config,enum:Enum/IntEnum
-#DataClass:
-#DataClassJson:
+#DataClass: 
+#DataClassJson: 
 """
 
 import datetime
@@ -41,19 +41,14 @@ class ActiveGameRoomPrediction:
     prediction_arima: Decimal = decimal.Decimal(0)
 
 
-
-
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
-class ApplicationUser( ):
+class AppUser:
+    id: Optional[str] = None
     first_name: Optional[str] = None
+    user_name: Optional[str] = None
     last_name: Optional[str] = None
     display_name: Optional[str] = None
-    profile_url: Optional[str] = None
-    facebook_user_id: Optional[str] = None
-    google_user_id: Optional[str] = None
-    google_profile_page_url: Optional[str] = None
-    microsoft_user_id: Optional[str] = None
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
@@ -64,27 +59,12 @@ class ApplicationUserPaymentLog:
     payment_covers_until: datetime.datetime = datetime.datetime(1, 1, 1)
     cost_usd: Decimal = decimal.Decimal(0)
     cost_sol: Decimal = decimal.Decimal(0)
-    # @References(typeof(ApplicationUser))
-    application_user_id: Optional[str] = None
+    # @References(typeof(AppUser))
+    users_id: Optional[str] = None
 
-    application_user: Optional[ApplicationUser] = None
+    application_app_user: Optional[AppUser] = None
+    transaction_hash: Optional[str] = None
     notes: Optional[str] = None
-
-
-@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
-@dataclass
-class ActiveGameResult:
-    id: int = 0
-    game_number: int = 0
-    room_id: int = 0
-    active_game_room_round_id: int = 0
-    game_result: Decimal = decimal.Decimal(0)
-    prediction: Decimal = decimal.Decimal(0)
-    prediction2: Decimal = decimal.Decimal(0)
-    prediction3: Decimal = decimal.Decimal(0)
-    prediction4: Decimal = decimal.Decimal(0)
-    prediction_arima: Decimal = decimal.Decimal(0)
-    no_more_bets_at: int = 0
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
@@ -102,29 +82,23 @@ class ActiveGameRoom:
 
     game_result: Decimal = decimal.Decimal(0)
     no_more_bets_at: int = 0
-
-
-TKey = TypeVar('TKey')
+    time_recorded: int = 0
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
-class IdentityUser1(Generic[TKey]):
-    id: Optional[TKey] = None
-    user_name: Optional[str] = None
-    normalized_user_name: Optional[str] = None
-    email: Optional[str] = None
-    normalized_email: Optional[str] = None
-    email_confirmed: bool = False
-    password_hash: Optional[str] = None
-    security_stamp: Optional[str] = None
-    concurrency_stamp: Optional[str] = None
-    phone_number: Optional[str] = None
-    phone_number_confirmed: bool = False
-    two_factor_enabled: bool = False
-    lockout_end: Optional[datetime.datetime] = None
-    lockout_enabled: bool = False
-    access_failed_count: int = 0
+class ActiveGameResult:
+    active_game_room_prediction_id: int = 0
+    game_number: int = 0
+    room_id: int = 0
+    active_game_room_round_id: int = 0
+    game_result: Decimal = decimal.Decimal(0)
+    prediction: Decimal = decimal.Decimal(0)
+    prediction2: Decimal = decimal.Decimal(0)
+    prediction3: Decimal = decimal.Decimal(0)
+    prediction4: Decimal = decimal.Decimal(0)
+    prediction_arima: Decimal = decimal.Decimal(0)
+    no_more_bets_at: int = 0
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
@@ -168,16 +142,11 @@ class QueryApplicationUserPaymentLog(QueryDb[ApplicationUserPaymentLog], IReturn
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
-class ApiQueryActiveRoomPredictionResults(QueryDb2[ActiveGameRoomPrediction, ActiveGameResult], IReturn[QueryResponse[ActiveGameResult]]):
-    pass
-
-
-@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
-@dataclass
 class ApiQueryActiveGameRoom(QueryDb[ActiveGameRoom], IReturn[QueryResponse[ActiveGameRoom]]):
     id: Optional[int] = None
     round_id: Optional[int] = None
     room_id: Optional[int] = None
+    time_recorded: Optional[int] = None
 
 
 # @Route("/query/activeroom", "GET")
@@ -187,6 +156,13 @@ class QueryActiveGameRoom(QueryDb[ActiveGameRoom], IReturn[QueryResponse[ActiveG
     id: Optional[int] = None
     round_id: Optional[int] = None
     room_id: Optional[int] = None
+    time_recorded: Optional[int] = None
+
+
+@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
+@dataclass
+class ApiQueryActiveRoomPredictionResults(QueryDb2[ActiveGameRoomPrediction, ActiveGameResult], IReturn[QueryResponse[ActiveGameResult]]):
+    pass
 
 
 # @Route("/query/activeroomprediction", "GET")
@@ -227,4 +203,5 @@ class CreateActiveGameRoom(IReturn[IdResponse], ICreateDb[ActiveGameRoom]):
     game_phase: Optional[str] = None
     game_result: Decimal = decimal.Decimal(0)
     no_more_bets_at: int = 0
+    time_recorded: int = 0
 
