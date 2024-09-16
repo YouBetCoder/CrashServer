@@ -15,6 +15,7 @@ public class ConfigureRequestLogs : IHostingStartup
                 return;
             }
 
+            return;
             services.AddPlugin(new RequestLogsFeature
             {
                 EnableResponseTracking = true,

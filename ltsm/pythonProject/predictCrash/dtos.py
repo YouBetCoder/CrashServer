@@ -1,8 +1,8 @@
 """ Options:
-Date: 2024-09-14 15:48:03
+Date: 2024-09-15 20:33:19
 Version: 8.40
 Tip: To override a DTO option, remove "#" prefix before updating
-BaseUrl: https://localhost:5001
+BaseUrl: https://crash.digitalstar.co
 
 #GlobalNamespace:
 #AddServiceStackTypes: True
@@ -41,15 +41,11 @@ class ActiveGameRoomPrediction:
     prediction_arima: Decimal = decimal.Decimal(0)
 
 
-@dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
-@dataclass
-class IdentityUser():
-    pass
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
-class ApplicationUser(IdentityUser):
+class ApplicationUser( ):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     display_name: Optional[str] = None
@@ -78,8 +74,9 @@ class ApplicationUserPaymentLog:
 @dataclass_json(letter_case=LetterCase.CAMEL, undefined=Undefined.EXCLUDE)
 @dataclass
 class ActiveGameResult:
-    active_game_room_game_number: int = 0
-    active_game_room_room_id: int = 0
+    id: int = 0
+    game_number: int = 0
+    room_id: int = 0
     active_game_room_round_id: int = 0
     game_result: Decimal = decimal.Decimal(0)
     prediction: Decimal = decimal.Decimal(0)

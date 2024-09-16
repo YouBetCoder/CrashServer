@@ -1,7 +1,6 @@
 import { createApp, reactive, ref, computed } from "vue"
 import { JsonServiceClient, $1, $$ } from "@servicestack/client"
-import ServiceStackVue from "@servicestack/vue"
-import HelloApi from "./components/HelloApi.mjs"
+import ServiceStackVue from "@servicestack/vue" 
 
 let client = null, Apps = []
 let AppData = {
@@ -11,10 +10,10 @@ export { client, Apps }
 
 /** Shared Global Components */
 const Components = {
-    HelloApi,
+    
 }
 const CustomElements = [
-    'lite-youtube'
+     
 ]
 
 const alreadyMounted = el => el.__vue_app__

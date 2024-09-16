@@ -34,12 +34,20 @@ public class AppHost() : AppHostBase("CrashServer"), IHostingStartup
 // Configure your AppHost with the necessary configuration and dependencies your App needs
     public override void Configure()
     {
-        SetConfig(new HostConfig());
+        
 #if DEBUG
-        LogManager.LogFactory = new ConsoleLogFactory(debugEnabled: true); //or console log
-        OrmLiteConfig.BeforeExecFilter = dbCmd => { Console.WriteLine(dbCmd.GetDebugString()); };
+        SetConfig(new HostConfig()
+        {
+            DebugMode = false
+        });
+    //    LogManager.LogFactory = new ConsoleLogFactory(debugEnabled: true); //or console log
+       // OrmLiteConfig.BeforeExecFilter = dbCmd => { Console.WriteLine(dbCmd.GetDebugString()); };
 #else
-LogManager.LogFactory = new ConsoleLogFactory( );
+SetConfig(new HostConfig()
+        {
+            DebugMode = false,
+        });
+//LogManager.LogFactory = new ConsoleLogFactory( );
 #endif
         //Allow Referencing in #Script expressions, e.g. [Input(EvalAllowableEntries)]
         ScriptContext.Args[nameof(AppData)] = AppData.Instance;

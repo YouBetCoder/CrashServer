@@ -29,7 +29,7 @@ public class TimedHostedService(IDbConnectionFactory dbConnectionFactory, ILogge
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
+        //GC.SuppressFinalize(this);
         _timer?.Dispose();
     }
 
@@ -38,7 +38,7 @@ public class TimedHostedService(IDbConnectionFactory dbConnectionFactory, ILogge
         using var db = await dbConnectionFactory.OpenAsync();
         try
         {
-            await db.ExecuteSqlAsync(
+            _ = await db.ExecuteSqlAsync(
                 """
                 UPDATE ActiveGameRoomPrediction
                 SET ActiveGameRoomId = ActiveGameRoom.ID

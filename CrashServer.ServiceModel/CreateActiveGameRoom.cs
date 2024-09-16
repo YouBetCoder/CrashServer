@@ -39,11 +39,10 @@ public class CreateActiveGameRoom : ICreateDb<ActiveGameRoom>, IReturn<IdRespons
     public decimal GameResult { get; set; } = default!;
 
     public long NoMoreBetsAt { get; set; }
+    public long TimeRecorded { get; set; }
 }
 
-[ValidateApiKey("api:querygameprediction")]
-public class ApiQueryActiveRoomPredictionResults
-    : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin<ActiveGameRoomPrediction, ActiveGameRoom>;
+
 
 [ValidateApiKey("api:querygamedata")]
 public class ApiQueryActiveGameRoom : QueryDb<ActiveGameRoom>
@@ -51,6 +50,7 @@ public class ApiQueryActiveGameRoom : QueryDb<ActiveGameRoom>
     public int? Id { get; set; }
     public int? RoundId { get; set; }
     public int? RoomId { get; set; }
+    public long? TimeRecorded { get; set; }
 }
 
 [Authenticate]
@@ -60,17 +60,27 @@ public class QueryActiveGameRoom : QueryDb<ActiveGameRoom>
     public int? Id { get; set; }
     public int? RoundId { get; set; }
     public int? RoomId { get; set; }
+    public long? TimeRecorded { get; set; }
 }
+
+[ValidateApiKey("api:querygameprediction")]
+public class ApiQueryActiveRoomPredictionResults
+    : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin< ActiveGameRoom,ActiveGameRoomPrediction>;
+
 
 [Authenticate]
 [EnableCors(allowedMethods: "GET,POST")]
 [Route("/query/activeroomprediction", Verbs = "GET")]
 public class QueryActiveRoomPredictionResults
-    : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin<ActiveGameRoomPrediction, ActiveGameRoom>;
+    : QueryDb<ActiveGameRoomPrediction, ActiveGameResult>, IJoin< ActiveGameRoom,ActiveGameRoomPrediction>;
 
+
+
+
+ 
 public class ActiveGameResult
 {
-    public int Id { get; set; }
+    public int ActiveGameRoomPredictionId { get; set; }
     public int GameNumber { get; set; }
     public int RoomId { get; set; }
     public int ActiveGameRoomRoundId { get; set; }

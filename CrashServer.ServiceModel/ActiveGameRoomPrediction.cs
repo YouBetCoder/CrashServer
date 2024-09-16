@@ -1,6 +1,7 @@
 ﻿using CrashServer.ServiceModel.Data;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
+
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
@@ -72,13 +73,15 @@ public class ApplicationUserPaymentLog
 
     public decimal CostSol { get; set; }
 
-    [Ref(Model = nameof(ApplicationUser), RefId = nameof(ApplicationUser.UserName), RefLabel = nameof(ApplicationUser.UserName))]
-    [References(typeof(ApplicationUser))]
-    public string? ApplicationUserId { get; set; }
+    [Ref(Model = nameof(AppUser), RefId = nameof(AppUser.UserName), RefLabel = nameof(AppUser.UserName))]
+    [References(typeof(AppUser))]
+    public string? UsersId { get; set; }
 
-    [Reference] public ApplicationUser ApplicationUser { get; set; } = default!;
+    [Reference] public AppUser ApplicationAppUser { get; set; } = default!;
 
+    [Unique] public string TransactionHash { get; set; }= default!;
     public string Notes { get; set; } = default!;
+    
 }
 
 [Authenticate]
@@ -86,11 +89,11 @@ public class ApplicationUserPaymentLog
 public class QueryApplicationUserPaymentLog : QueryDb<ApplicationUserPaymentLog>
 {
     public int? Id { get; set; }
-    public DateTime? PaymentCoversFrom { get; set; } 
-    public DateTime? PaymentCoversUntil { get; set; } 
+    public DateTime? PaymentCoversFrom { get; set; }
+    public DateTime? PaymentCoversUntil { get; set; }
     public string? ApplicationUserId { get; set; }
 }
- 
+
 [Authenticate]
 [RequiredRole("Admin")]
 public class CreateApplicationUserPaymentLog : ICreateDb<ApplicationUserPaymentLog>, IReturn<IdResponse>

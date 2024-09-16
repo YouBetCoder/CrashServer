@@ -1,4 +1,5 @@
 ﻿using ServiceStack.DataAnnotations;
+
 // ReSharper disable UnusedMember.Global
 
 namespace CrashServer.ServiceModel;
@@ -10,8 +11,7 @@ public class ActiveGameRoom
 
     [Index] public int GameNumber { get; set; } = default!;
     [Index] public int RoomId { get; set; } = default!;
-    [Unique]
-    public int RoundId { get; set; }
+    [Unique] public int RoundId { get; set; }
     [StringLength(255)] public string GameStatus { get; set; } = default!;
 
     [StringLength(255)] public string GamePhase { get; set; } = default!;
@@ -19,5 +19,6 @@ public class ActiveGameRoom
     public decimal GameResult { get; set; } = default!;
 
     public long NoMoreBetsAt { get; set; }
-}
 
+    [Index] public long TimeRecorded { get; set; }
+}

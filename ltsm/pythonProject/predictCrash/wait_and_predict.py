@@ -133,12 +133,12 @@ def wait_and_predict(prev_round_id):
     items, data, last_game, last_round_id = get_next_game(prev_round_id)
     if len(items) < 30:
         logger.info("Not enough data to make predictions")
-        return False
+        return last_round_id
     if not check_items(items):
         logger.info("Not enough sequential data to make predictions")
-        return
+        return last_round_id
     if prev_round_id == last_round_id:
-        return
+        return last_round_id
     room_id = last_game.room_id
     game_number = last_game.game_number
 

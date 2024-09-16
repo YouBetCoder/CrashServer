@@ -4,11 +4,9 @@ After=network.target
 
 [Service]
 WorkingDirectory=/home/crash/crashPredict/
-ExecStart=/usr/bin/python3.11 /home/crash/crashPredict/rnn_ltsm.py
+ExecStart=/usr/bin/python3.12 /home/crash/predict/crashPredict/rnn_ltsm.py
 Restart=always
-SyslogIdentifier=rnn_ltsm
-StandardOutput=syslog
-StandardError=syslog
+
 
 [Install]
 WantedBy=multi-user.target
